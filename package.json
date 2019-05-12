@@ -1,0 +1,40 @@
+{
+  "name": "devconnectorfront",
+  "version": "1.0.0",
+  "description": "Pet",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "t"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IvanovSP/devConnectorFront.git"
+  },
+  "author": "IvanovSP",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IvanovSP/devConnectorFront/issues"
+  },
+  "homepage": "https://github.com/IvanovSP/devConnectorFront#readme",
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "immer": "^3.1.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "react-router-dom": "^5.0.0",
+    "redux": "^4.0.1",
+    "redux-saga": "^1.0.2",
+    "styled-components": "^4.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.4",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "clean-webpack-plugin": "^2.0.2",
+    "html-webpack-plugin": "^3.2.0"
+  }
+}
