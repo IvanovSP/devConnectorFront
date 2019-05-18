@@ -32,4 +32,19 @@ module.exports = {
       children: true,
     }],
   },
+  overrides: [
+    {
+      files: ['src/redux/reducers/**/*.js'],
+      rules: {
+        'no-param-reassign': 'off', // for immer
+      },
+    },
+  ],
+  settings: {
+    'import/resolver': {
+      webpack: {
+        config: 'config/webpack.dev.js'
+      },
+    },
+  },
 };
