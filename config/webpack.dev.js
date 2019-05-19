@@ -29,7 +29,7 @@ module.exports = {
       title: 'Dev Connector',
       template: path.join(__dirname, '../src/index.html'),
       cache: false,
-      favicon: path.join(__dirname, '../src/assets/fav.png'),
+      favicon: path.join(__dirname, '../src/assets/img/fav.png'),
     }),
     new CleanWebpackPlugin(),
   ],
@@ -48,13 +48,13 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|svg|jpg|gif|woff|woff2|eot|ttf)$/,
+        test: /\.(png|svg|jpg|gif)$/,
         use: [
           {
-            loader: 'url-loader',
             options: {
               limit: 8192,
               fallback: 'file-loader',
+              publicPath: 'assets',
             },
           },
         ],
