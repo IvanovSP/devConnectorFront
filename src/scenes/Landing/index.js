@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-// import showcase from '@/assets/img/showcase.jpg';
+import showcase from '@/assets/img/showcase.jpg';
 
 const Wrapper = styled.section`
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url(assets/showcase.jpg);
+  background-image: url(${showcase});
 `;
 
 
