@@ -51,10 +51,29 @@ module.exports = {
         test: /\.(png|svg|jpg|gif)$/,
         use: [
           {
+            loader: 'url-loader',
             options: {
               limit: 8192,
               fallback: 'file-loader',
               publicPath: 'assets',
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              mozjpeg: {
+                enabled: true,
+              },
+              gifsicle: {
+                interlaced: false,
+              },
+              optipng: {
+                optimizationLevel: 7,
+              },
+              pngquant: {
+                quality: '65-90',
+                speed: 4,
+              },
             },
           },
         ],
