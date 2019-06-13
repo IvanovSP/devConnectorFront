@@ -4,14 +4,15 @@ import styled from 'styled-components';
 
 import Header from '@/components/Header';
 import Landing from '@/scenes/Landing';
+import RegisterPage from '@/scenes/RegisterPage';
+import LoginPage from '@/scenes/LoginPage';
 
-const ProfilePage = () => <div>This is a Home Page</div>
-const LoginPage = () => <div>This is a Login Page</div>
-const RegisterPage = () => <div>This is a Register Page</div>
+const ProfilesPage = () => <div>This is a Home Page</div>
 
 const Container = styled.div`
   flex: 1;
   display: flex;
+  justify-content: center;
 `;
 
 export default () => (
@@ -21,7 +22,7 @@ export default () => (
       <Route path="/" exact component={Landing} />
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
-      <Route path="/profiles" component={ProfilePage} />
+      <Route path="/profiles" component={ProfilesPage} />
     </Container>
   </React.Fragment>
 );

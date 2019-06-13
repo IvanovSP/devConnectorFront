@@ -77,6 +77,47 @@ const GlobalStyle = createGlobalStyle`
     background: var(--primary-color);
     color: #fff;
   }
+  
+  .text-primary {
+    color: var(--primary-color);
+  }
+  
+  .large {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  .form .form-group {
+    margin: 1.2rem 0;
+  }
+  .form input[type='text'], .form input[type='email'], .form input[type='password'], .form input[type='date'], .form select, .form textarea {
+    display: block;
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+  }
+  .form input[type='submit'], button {
+    font: inherit;
+  }
+  
+  .my-1 {
+    margin: 1rem 0;
+  }
+  
+  .alert {
+    padding: 0.8rem;
+    margin: 1rem 0;
+    opacity: 0.9;
+    background: var(--light-color);
+    color: #333;
+  }
+  
+  .btn-danger, .bg-danger, .badge-danger, .alert-danger {
+    background: var(--danger-color);
+    color: #fff;
+  }
 `;
 
 const App = () => (
