@@ -7,7 +7,8 @@ import Landing from '@/scenes/Landing';
 import RegisterPage from '@/scenes/RegisterPage';
 import LoginPage from '@/scenes/LoginPage';
 
-const ProfilesPage = () => <div>This is a Home Page</div>
+import ProfilesPage from '@/scenes/ProfilesPage';
+import ProfilePage from '@/scenes/ProfilePage';
 
 const Container = styled.div`
   flex: 1;
@@ -23,6 +24,7 @@ export default () => (
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
       <Route path="/profiles" component={ProfilesPage} />
+      <Route path="/profile" component={ProfilePage} />
     </Container>
   </React.Fragment>
 );

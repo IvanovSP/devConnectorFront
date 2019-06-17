@@ -13,6 +13,11 @@ module.exports = {
     https: true,
     host: 'localhost',
     port: 3000,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+    historyApiFallback: true,
   },
   entry: {
     main: path.join(__dirname, '../src/index.js'),

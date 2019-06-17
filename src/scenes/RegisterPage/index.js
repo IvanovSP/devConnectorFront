@@ -2,11 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Wrapper from '@/components/Wrapper';
 
-
 export default () => (
   <Wrapper>
     <h1 className="large text-primary">Sign Up</h1>
-    <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
+    <p className="lead">
+      <i className="fas fa-user" />
+      Create Your Account
+    </p>
     <form className="form">
       <div className="form-group">
         <input type="text" placeholder="Name" name="name" required="" />

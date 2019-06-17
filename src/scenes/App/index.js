@@ -106,6 +106,10 @@ const GlobalStyle = createGlobalStyle`
     margin: 1rem 0;
   }
   
+  .p-1 {
+    padding: 1rem;
+  }
+  
   .alert {
     padding: 0.8rem;
     margin: 1rem 0;
@@ -117,6 +121,112 @@ const GlobalStyle = createGlobalStyle`
   .btn-danger, .bg-danger, .badge-danger, .alert-danger {
     background: var(--danger-color);
     color: #fff;
+  }
+  
+  .profile {
+    display: grid;
+    grid-template-columns: 2fr 4fr 2fr;
+    align-items: center;
+    grid-gap: 2rem;
+    padding: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+  
+  .bg-light {
+    border: #ccc solid 1px;
+  }
+  
+  .btn-light, .bg-light, .badge-light, .alert-light {
+    background: var(--light-color);
+    color: #333;
+  }
+  
+  .round-img {
+    border-radius: 50%;
+  }
+  
+  profile-grid {
+    display: grid;
+    grid-template-areas: 'top top'
+   'about about'
+   'exp edu'
+   'github github';
+    grid-gap: 1rem;
+  }
+  
+  .my-1 {
+    margin: 1rem 0;
+  }
+  
+  .profile-top {
+    grid-area: top;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .p-2 {
+    padding: 2rem;
+  }
+  
+  .profile-about {
+    margin-top: 20px;
+    grid-area: about;
+    text-align: center;
+  }
+  
+  .line {
+    height: 1px;
+    background: #ccc;
+    margin: 1.5rem 0;
+  }
+  
+  .profile-about .skills {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .profile-top img {
+    width: 250px;
+  }
+  
+  .repo {
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .badge {
+    padding: 3px;
+    margin: 3px;
+    text-align: center;
+  }
+  
+  .badge-dark {
+    background: black;
+    color: white;
+  }
+  
+  .btn-white, .bg-white, .badge-white, .alert-white {
+    background: #fff;
+    color: #333;
+    border: #ccc solid 1px;
+  }
+  
+  .profile-wrapper {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    padding-top: 20px;
+  }
+  
+  .profile-info {
+    flex: 0.49;
   }
 `;
 
