@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getIsSignedIn } from '@/redux/selectors/login';
 
 const Nav = styled.nav`
   display: flex;
@@ -31,7 +33,7 @@ const Ul = styled.ul`
   display: flex;
 `;
 
-export default () => (
+const Header = ({ isSignedIn }) => (
   <Nav>
     <h1>
       <Link to="/">
@@ -41,9 +43,25 @@ export default () => (
       </Link>
     </h1>
     <Ul>
-      <li><Link to="/profiles">Developers</Link></li>
-      <li><Link to="/register">Register</Link></li>
-      <li><Link to="/login">Login</Link></li>
+      {
+        isSignedIn
+          ? <li><Link to="/profiles">Developers</Link></li>
+          : (
+            <React.Fragment>
+              <li><Link to="/register">Register</Link></li>
+              <li><Link to="/login">Login</Link></li>
+            </React.Fragment>
+          )
+      }
     </Ul>
   </Nav>
 );
+
+const mapStateToProps = /* istanbul ignore next */ state => ({
+  isSignedIn: getIsSignedIn(state),
+});
+
+export default connect(
+  mapStateToProps,
+  null,
+)(Header);

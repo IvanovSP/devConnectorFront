@@ -1,6 +1,7 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import Header from '@/components/Header';
 import Landing from '@/scenes/Landing';
@@ -9,6 +10,7 @@ import LoginPage from '@/scenes/LoginPage';
 
 import ProfilesPage from '@/scenes/ProfilesPage';
 import ProfilePage from '@/scenes/ProfilePage';
+import { getIsSignedIn } from "@/redux/selectors/login";
 
 const Container = styled.div`
   flex: 1;
@@ -16,15 +18,41 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-export default () => (
+const protectedRoutes = (
+  <Switch>
+    <Route path="/" exact component={ProfilePage} />
+    <Route path="/profiles" component={ProfilesPage} />
+    <Redirect to="/" />
+  </Switch>
+);
+
+const pubicRoutes = (
+  <Switch>
+    <Route path="/" exact component={Landing} />
+    <Route path="/login" component={LoginPage} />
+    <Route path="/register" component={RegisterPage} />
+    <Redirect to="/" />
+  </Switch>
+);
+
+const Layout = ({ isSignedIn }) => (
   <React.Fragment>
     <Header />
     <Container>
-      <Route path="/" exact component={Landing} />
-      <Route path="/login" component={LoginPage} />
-      <Route path="/register" component={RegisterPage} />
-      <Route path="/profiles" component={ProfilesPage} />
-      <Route path="/profile" component={ProfilePage} />
+      {
+        isSignedIn
+          ? protectedRoutes
+          : pubicRoutes
+      }
     </Container>
   </React.Fragment>
 );
+
+const mapStateToProps = /* istanbul ignore next */ state => ({
+  isSignedIn: getIsSignedIn(state),
+});
+
+export default connect(
+  mapStateToProps,
+  null,
+)(Layout);

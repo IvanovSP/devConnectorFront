@@ -1,12 +1,15 @@
 import { put, call, fork, all, takeEvery } from 'redux-saga/effects';
-import { REQUEST_LOGIN, setLoginError } from '@/redux/actions';
+import { REQUEST_LOGIN, setLoginError, setIsSignedIn } from '@/redux/actions';
 import login from '@/api/login';
 
-export function* reqestLogin({ email, password }) {
+export function* reqestLogin({ email, password, history }) {
   try {
-    const token = yield call(login, { email, password });
+    const { data: { token } } = yield call(login, { email, password });
     localStorage.setItem('session-token', token);
+    yield put(setIsSignedIn(true));
+    yield call(history.push, '/');
   } catch (error) {
+    console.error(error);
     const errorMessage = error.status === 500 ? 'Server error, try later' : 'Password invalid or user not found';
     yield put(setLoginError(errorMessage));
   }
