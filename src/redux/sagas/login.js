@@ -1,8 +1,9 @@
 import { put, call, fork, all, takeEvery, take } from 'redux-saga/effects';
 import { REQUEST_LOGIN, setLoginError, setIsSignedIn, APP_INIT } from '@/redux/actions';
 import login from '@/api/login';
+import history from '@/utils/history';
 
-export function* reqestLogin({ email, password, history }) {
+function* reqestLogin({ email, password }) {
   try {
     const { data: { token } } = yield call(login, { email, password });
     localStorage.setItem('session-token', token);
@@ -15,7 +16,7 @@ export function* reqestLogin({ email, password, history }) {
   }
 }
 
-export function* watchForReqestLogin() {
+function* watchForReqestLogin() {
   yield takeEvery(REQUEST_LOGIN, reqestLogin);
 }
 

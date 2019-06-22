@@ -1,7 +1,8 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, Router } from 'react-router-dom';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import history from '@/utils/history';
 
 import Header from '@/components/Header';
 import Landing from '@/scenes/Landing';
@@ -10,7 +11,7 @@ import LoginPage from '@/scenes/LoginPage';
 
 import ProfilesPage from '@/scenes/ProfilesPage';
 import ProfilePage from '@/scenes/ProfilePage';
-import { getIsSignedIn } from "@/redux/selectors/login";
+import { getIsSignedIn } from '@/redux/selectors/login';
 
 const Container = styled.div`
   flex: 1;
@@ -37,13 +38,15 @@ const pubicRoutes = (
 
 const Layout = ({ isSignedIn }) => (
   <React.Fragment>
-    <Header />
     <Container>
-      {
-        isSignedIn
-          ? protectedRoutes
-          : pubicRoutes
-      }
+      <Router history={history}>
+        <Header />
+        {
+          isSignedIn
+            ? protectedRoutes
+            : pubicRoutes
+        }
+      </Router>
     </Container>
   </React.Fragment>
 );

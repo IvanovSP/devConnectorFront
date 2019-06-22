@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Wrapper from '@/components/Wrapper';
 import { connect } from 'react-redux';
 import { requestLogin } from '@/redux/actions';
@@ -7,13 +7,13 @@ import { getLoginError } from '@/redux/selectors/login';
 
 const { useState } = React;
 
-const Login = ({ handleLogin, error, history }) => {
+const Login = ({ handleLogin, error }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const onSubmit = (e) => {
     e.preventDefault();
-    handleLogin({ email, password, history });
+    handleLogin({ email, password });
   };
 
   return (
@@ -62,12 +62,11 @@ const mapStateToProps = /* istanbul ignore next */ state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  handleLogin: ({ email, password, history }) => {
+  handleLogin: ({ email, password }) => {
     dispatch(
       requestLogin(
         email,
         password,
-        history,
       ),
     );
   },
@@ -76,4 +75,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withRouter(Login));
+)(Login);

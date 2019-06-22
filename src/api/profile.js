@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const profile = async (bearer) => {
+const profile = async () => {
   const config = {
     method: 'get',
     url: 'http://localhost:5000/api/profile/',
-    headers: { Authorization: bearer },
+    headers: { Authorization: localStorage.getItem('session-token') },
   };
   const res = await axios(config);
   return res;
