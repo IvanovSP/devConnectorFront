@@ -22,9 +22,9 @@ export default createReducer(initialState, {
       draft.err = '';
     });
   },
-  [SET_IS_SIGNEDIN](state) {
+  [SET_IS_SIGNEDIN](state, { isSignedIn }) {
     return produce(state, draft => {
-      draft.isSignedIn = true;
+      draft.isSignedIn = isSignedIn;
     });
   },
 });
