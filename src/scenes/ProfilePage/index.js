@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom';
 import Wrapper from '@/components/Wrapper';
 import { connect } from 'react-redux';
 
-import { getInfo } from '@/redux/selectors/profile';
+import { getInfo, getGitProjects } from '@/redux/selectors/profile';
 import { getProfileInfo } from '@/redux/actions/profile';
 
 const { useEffect } = React;
 
-const Profile = ({ profile, getInfo }) => {
+const Profile = ({ profile, getInfo, match, gitProjects }) => {
+  const { userId } = match.params;
   useEffect(() => {
-    getInfo();
-  }, [getInfo]);
-  console.log(profile);
+    getInfo(match.params.userId);
+  }, [getInfo, userId]);
 
   return  (
     <Wrapper>
@@ -76,52 +76,49 @@ const Profile = ({ profile, getInfo }) => {
                 }
               </div>
 
-              {/*degree: "Dynamic Interactions Manager degree"*/}
-              {/*end_date: "2019-04-27 10:32:11.889"*/}
-              {/*establishment: "hawaii academy"*/}
-              {/*establishment_id: 493*/}
-              {/*id: 4567*/}
-              {/*program_description: "Fuga est perferendis sint quia reiciendis fugiat quasi."*/}
-              {/*start_date: "2018-08-01 14:30:32.115"*/}
-              {/*stydy_field: "Response"*/}
               <div className="profile-info profile-edu bg-white p-2">
                 <h2 className="text-primary">Education</h2>
-                <div>
-                  <h3>University Of Washington</h3>
-                  <p>Sep 1993 - June 1999</p>
-                  <p><strong>Degree: </strong>Masters</p>
-                  <p><strong>Field Of Study: </strong>Computer Science</p>
-                  <p>
-                    <strong>Description: </strong>Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Dignissimos placeat, dolorum ullam
-                    ipsam, sapiente suscipit dicta eius velit amet aspernatur
-                    asperiores modi quidem expedita fugit.
-                  </p>
-                </div>
+                {
+                  profile.education.map(education => (
+                    <>
+                      <h3 style={{textTransform: 'uppercase'}}>{education.establishment}</h3>
+                      <p>{moment(education.start_date).format('LL')} - {moment(education.end_date).format('LL')}</p>
+                      <p><strong>Degree: </strong>{education.degree}</p>
+                      <p><strong>Field Of Study: </strong>{education.stydy_field}</p>
+                      <p>
+                        <strong>Description: </strong> {education.program_description}
+                      </p>
+                    </>
+                  ))
+                }
               </div>
             </div>
 
-            {/*<div className="profile-github">*/}
-              {/*<h2 className="text-primary my-1">*/}
-                {/*<i className="fab fa-github"></i> Github Repos*/}
-              {/*</h2>*/}
-              {/*<div className="repo bg-white p-1 my-1">*/}
-                {/*<div>*/}
-                  {/*<h4><a href="#" target="_blank" rel="noopener noreferrer">Repo Two</a></h4>*/}
-                  {/*<p>*/}
-                    {/*Lorem ipsum dolor sit amet consectetur adipisicing elit.*/}
-                    {/*Repellat, laborum!*/}
-                  {/*</p>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                  {/*<ul>*/}
-                    {/*<li className="badge badge-primary">Stars: 44</li>*/}
-                    {/*<li className="badge badge-dark">Watchers: 21</li>*/}
-                    {/*<li className="badge badge-light">Forks: 25</li>*/}
-                  {/*</ul>*/}
-                {/*</div>*/}
-              {/*</div>*/}
-            {/*</div>*/}
+            <div className="profile-github">
+              <h2 className="text-primary my-1">
+                <i className="fab fa-github"></i> Github Repos
+              </h2>
+              {
+                gitProjects.map(gitProject => (
+                  <div className="repo bg-white p-1 my-1">
+                    <div>
+                      <h4><a href={gitProject.html_url} target="_blank" rel="noopener noreferrer">{gitProject.name}</a></h4>
+                      <p>
+                        {gitProject.description}
+                      </p>
+                    </div>
+                    <div>
+                      <ul>
+                        <li className="badge badge-primary">Stars: {gitProject.stargazers_count}</li>
+                        <li className="badge badge-dark">Watchers: {gitProject.watchers_count}</li>
+                        <li className="badge badge-light">Forks: {gitProject.forks_count}</li>
+                      </ul>
+                    </div>
+                  </div>
+                  )
+                )
+              }
+            </div>
           </div>
       )
       }
@@ -131,11 +128,12 @@ const Profile = ({ profile, getInfo }) => {
 
 const mapStateToProps = /* istanbul ignore next */ state => ({
   profile: getInfo(state),
+  gitProjects: getGitProjects(state),
 });
 
-const mapDispatchToProps = {
-  getInfo: getProfileInfo,
-};
+const mapDispatchToProps = dispatch => ({
+  getInfo: (userId) => dispatch(getProfileInfo(userId)),
+});
 
 export default connect(
   mapStateToProps,

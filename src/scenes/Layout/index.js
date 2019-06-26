@@ -21,8 +21,8 @@ const Container = styled.div`
 
 const protectedRoutes = (
   <Switch>
-    <Route path="/" exact component={ProfilePage} />
     <Route path="/profiles" component={ProfilesPage} />
+    <Route path="/:userId?" exact component={ProfilePage} />
     <Redirect to="/" />
   </Switch>
 );

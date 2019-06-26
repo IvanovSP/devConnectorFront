@@ -186,6 +186,7 @@ export default createGlobalStyle`
     align-items: center;
     justify-content: center;
     text-align: center;
+    flex-wrap: wrap-reverse;
   }
   
   .profile-top img {
