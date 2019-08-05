@@ -8,6 +8,7 @@ import Header from '@/components/Header';
 import Landing from '@/scenes/Landing';
 import RegisterPage from '@/scenes/RegisterPage';
 import LoginPage from '@/scenes/LoginPage';
+import Woops from '@/components/Woops';
 
 import ProfilesPage from '@/scenes/ProfilesPage';
 import ProfilePage from '@/scenes/ProfilePage';
@@ -22,6 +23,7 @@ const Container = styled.div`
 const protectedRoutes = (
   <Switch>
     <Route path="/profiles" component={ProfilesPage} />
+    <Route path="/woops" exact component={Woops} />
     <Route path="/:userId?" exact component={ProfilePage} />
     <Redirect to="/" />
   </Switch>
@@ -32,6 +34,7 @@ const pubicRoutes = (
     <Route path="/" exact component={Landing} />
     <Route path="/login" component={LoginPage} />
     <Route path="/register" component={RegisterPage} />
+    <Route path="/woops" exact component={Woops} />
     <Redirect to="/" />
   </Switch>
 );

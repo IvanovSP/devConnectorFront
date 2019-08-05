@@ -59,7 +59,7 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
                   profile.experience.map(
                     (experience, i, arr) => (
                       <React.Fragment>
-                        <div>
+                        <div key={moment(experience.startedDate).format()+moment(experience.endedDate).format()}>
                           <h3 className="text-dark"><a href={experience.company_website}>{experience.company_name}</a></h3>
                           <p>{moment(experience.startedDate).format('LL')} - {moment(experience.endedDate).format('LL')}</p>
                           <p><strong>Position: </strong>{experience.job_title}</p>
@@ -69,7 +69,10 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
                             {experience.work_descriprion}
                           </p>
                         </div>
-                        {arr[i + 1] && <div className="line" />}
+                        {arr[i + 1] && <div
+                          key={moment(experience.startedDate).format()+moment(experience.endedDate).format()+1}
+                          className="line"
+                        />}
                       </React.Fragment>
                     ),
                   )
@@ -80,7 +83,7 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
                 <h2 className="text-primary">Education</h2>
                 {
                   profile.education.map(education => (
-                    <>
+                    <div key={moment(education.start_date).format('LL') + education.degree}>
                       <h3 style={{textTransform: 'uppercase'}}>{education.establishment}</h3>
                       <p>{moment(education.start_date).format('LL')} - {moment(education.end_date).format('LL')}</p>
                       <p><strong>Degree: </strong>{education.degree}</p>
@@ -88,7 +91,7 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
                       <p>
                         <strong>Description: </strong> {education.program_description}
                       </p>
-                    </>
+                    </div>
                   ))
                 }
               </div>
@@ -100,7 +103,7 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
               </h2>
               {
                 gitProjects.map(gitProject => (
-                  <div className="repo bg-white p-1 my-1">
+                  <div key={gitProject.html_url} className="repo bg-white p-1 my-1">
                     <div>
                       <h4><a href={gitProject.html_url} target="_blank" rel="noopener noreferrer">{gitProject.name}</a></h4>
                       <p>
