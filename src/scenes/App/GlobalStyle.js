@@ -85,6 +85,34 @@ export default createGlobalStyle`
     margin-bottom: 1rem;
   }
   
+  .center {
+    text-align: center;
+  }
+  
+  .editProfile {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .status-occupation-wrapper{
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    width: 487px;
+  }
+  .middle-font {
+    font-size: 1.5rem;
+  }
+  
+  .small-font {
+    font-size: 1rem;
+  }
+  
   .form .form-group {
     margin: 1.2rem 0;
   }
@@ -163,6 +191,7 @@ export default createGlobalStyle`
     align-items: center;
     justify-content: center;
     text-align: center;
+    position: relative;
   }
   
   .p-2 {

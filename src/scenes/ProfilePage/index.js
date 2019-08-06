@@ -7,10 +7,12 @@ import { connect } from 'react-redux';
 import { getInfo, getGitProjects } from '@/redux/selectors/profile';
 import { getProfileInfo } from '@/redux/actions/profile';
 
-const { useEffect } = React;
+const { useEffect, useState } = React;
 
 const Profile = ({ profile, getInfo, match, gitProjects }) => {
   const { userId } = match.params;
+  const [ editMode, toggleEditMode ] = useState(false);
+  const isMyPage = !match.params.userId;
   useEffect(() => {
     getInfo(match.params.userId);
   }, [getInfo, userId]);
@@ -23,10 +25,38 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
       { profile.user_name && (
           <div className="profile-grid my-1">
             <div className="profile-top bg-primary p-2">
+
+                { isMyPage && <button className="editProfile" type="button" onClick={() => toggleEditMode(!editMode)}>Change</button> }
+
                 <img className="round-img my-1" src={profile.avatar} alt="" />
-                <h1 className="large">{profile.user_name}</h1>
-                <p className="lead">{profile.profession} at {profile.company_name}</p>
-                <p>{profile.city}</p>
+
+                {
+                  editMode
+                    ? <input className="large center" value={profile.user_name} />
+                    : <h1 className="large">{profile.user_name}</h1>
+                }
+
+                {
+                  editMode
+                    ? (
+                      <div className="status-occupation-wrapper">
+                        <input className="center middle-font" value={profile.profession} />
+                        at
+                        <input className="center middle-font" value={profile.company_name} />
+                      </div>
+                    )
+                    : <p className="lead">{profile.profession} at {profile.company_name}</p>
+                }
+                {
+                  editMode
+                    ? (
+                      <>
+                        <br/>
+                        <input className="center small-font" value={profile.city} />
+                      </>
+                    )
+                    : <p>{profile.city}</p>
+                }
                 <div className="icons my-1">
                   {profile.social.map((social) => {
                     const className = `fab fa-${social.social_account} fa-2x"`;
