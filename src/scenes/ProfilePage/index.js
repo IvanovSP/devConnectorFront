@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import Autosuggest from 'react-autosuggest';
 import Wrapper from '@/components/Wrapper';
 import { connect } from 'react-redux';
 
@@ -11,11 +12,26 @@ const { useEffect, useState } = React;
 
 const Profile = ({ profile, getInfo, match, gitProjects }) => {
   const { userId } = match.params;
-  const [ editMode, toggleEditMode ] = useState(false);
+  const [ editMode, setEditMode ] = useState(false);
+  const [ userName, setUserName ] = useState('');
+  const [ profession, setProfession ] = useState('');
+  const [ companyName, setCompanyName ] = useState('');
+  const [ city, setCity ] = useState('');
+
   const isMyPage = !match.params.userId;
   useEffect(() => {
     getInfo(match.params.userId);
   }, [getInfo, userId]);
+
+  // set values on fetch or editMode turned on
+  useEffect(() => {
+    if (profile.user_name && editMode) {
+      setUserName(profile.user_name);
+      setProfession(profile.profession);
+      setCompanyName(profile.company_name);
+      setCity(profile.city);
+    }
+  }, [profile, editMode]);
 
   return  (
     <Wrapper>
@@ -26,13 +42,13 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
           <div className="profile-grid my-1">
             <div className="profile-top bg-primary p-2">
 
-                { isMyPage && <button className="editProfile" type="button" onClick={() => toggleEditMode(!editMode)}>Change</button> }
+                { isMyPage && <button className="editProfile" type="button" onClick={() => setEditMode(!editMode)}>Change</button> }
 
                 <img className="round-img my-1" src={profile.avatar} alt="" />
 
                 {
                   editMode
-                    ? <input className="large center" value={profile.user_name} />
+                    ? <input value={userName} onChange={e => setUserName(e.target.value)} className="large center" />
                     : <h1 className="large">{profile.user_name}</h1>
                 }
 
@@ -40,9 +56,10 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
                   editMode
                     ? (
                       <div className="status-occupation-wrapper">
-                        <input className="center middle-font" value={profile.profession} />
+                        {/*<Autosuggest />*/}
+                        <input value={profession} onChange={e => setProfession(e.target.value)} className="center middle-font" />
                         at
-                        <input className="center middle-font" value={profile.company_name} />
+                        <input value={companyName} onChange={e => setCompanyName(e.target.value)} className="center middle-font" />
                       </div>
                     )
                     : <p className="lead">{profile.profession} at {profile.company_name}</p>
@@ -52,7 +69,7 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
                     ? (
                       <>
                         <br/>
-                        <input className="center small-font" value={profile.city} />
+                        <input className="center small-font" onChange={e => setCity(e.target.value)} value={city} />
                       </>
                     )
                     : <p>{profile.city}</p>
