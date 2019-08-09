@@ -6,7 +6,7 @@ import Wrapper from '@/components/Wrapper';
 import { connect } from 'react-redux';
 
 import { getInfo, getGitProjects } from '@/redux/selectors/profile';
-import { getProfileInfo } from '@/redux/actions/profile';
+import { getProfileInfo, getSuggestions } from '@/redux/actions/profile';
 
 const { useEffect, useState } = React;
 
@@ -56,7 +56,18 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
                   editMode
                     ? (
                       <div className="status-occupation-wrapper">
-                        {/*<Autosuggest />*/}
+                        <Autosuggest
+                          suggestions={suggestions}
+                          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                          getSuggestionValue={getSuggestionValue}
+                          renderSuggestion={renderSuggestion}
+                          inputProps={{
+                            className: 'center middle-font',
+                            value: profession,
+                            onChange: e => setProfession(e.target.value),
+                          }}
+                        />
                         <input value={profession} onChange={e => setProfession(e.target.value)} className="center middle-font" />
                         at
                         <input value={companyName} onChange={e => setCompanyName(e.target.value)} className="center middle-font" />
@@ -183,6 +194,7 @@ const mapStateToProps = /* istanbul ignore next */ state => ({
 
 const mapDispatchToProps = dispatch => ({
   getInfo: (userId) => dispatch(getProfileInfo(userId)),
+  getProfessions: (query, ) => dispatch(getSuggestions(query)),
 });
 
 export default connect(
