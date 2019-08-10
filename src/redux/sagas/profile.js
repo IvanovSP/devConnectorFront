@@ -1,5 +1,5 @@
-import { all, fork, call, takeEvery, put } from 'redux-saga/effects';
-import { GET_PROFILE_INFO, setProfileInfo, setGitProjects, GET_SUGGESTIONS } from '@/redux/actions';
+import { all, fork, call, takeEvery, put, take } from 'redux-saga/effects';
+import { GET_PROFILE_INFO, setProfileInfo, setGitProjects, GET_SUGGESTIONS, setSuggestions } from '@/redux/actions';
 import { profile, profileGit } from '@/api/profile';
 import { getSuggestions } from '@/api/sugestions';
 import { handleError } from '@/redux/sagas/global';
@@ -21,7 +21,15 @@ function* profileSaga({ userId }) {
 export function* suggestionsSaga() {
   while (true) {
     const { searchQuery, fieldName } = yield take(GET_SUGGESTIONS);
-    const suggestions = yield call(getSuggestions, { searchQuery, fieldName });
+    if (!searchQuery) return;
+
+    try {
+      const suggestions = yield call(getSuggestions, { searchQuery, fieldName });
+      yield put(setSuggestions(suggestions, fieldName));
+    } catch (error) {
+      yield put(setSuggestions([], fieldName));
+      yield call(handleError, error);
+    }
   }
 }
 

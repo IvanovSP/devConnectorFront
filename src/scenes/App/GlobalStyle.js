@@ -255,4 +255,21 @@ export default createGlobalStyle`
   .profile-info {
     flex: 0.49;
   }
+  
+  .react-autosuggest__container{
+    position: relative;
+  }
+  
+  .react-autosuggest__container input{
+    width: 100%;
+  }
+  
+  .react-autosuggest__suggestions-container {
+    position: absolute;
+    width: 100%;
+    background: white;
+    max-height: 200px;
+    color: black;
+    overflow: scroll;
+  }
 `;

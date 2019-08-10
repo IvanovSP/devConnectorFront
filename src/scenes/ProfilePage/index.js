@@ -5,12 +5,12 @@ import Autosuggest from 'react-autosuggest';
 import Wrapper from '@/components/Wrapper';
 import { connect } from 'react-redux';
 
-import { getInfo, getGitProjects } from '@/redux/selectors/profile';
-import { getProfileInfo, getSuggestions } from '@/redux/actions/profile';
+import { getInfo, getGitProjects, getSuggestions as getSuggestionsProps } from '@/redux/selectors/profile';
+import { getProfileInfo, getSuggestions, setSuggestions } from '@/redux/actions/profile';
 
 const { useEffect, useState } = React;
 
-const Profile = ({ profile, getInfo, match, gitProjects }) => {
+const Profile = ({ profile, getInfo, match, gitProjects, getSuggestions, suggestions, setSuggestions }) => {
   const { userId } = match.params;
   const [ editMode, setEditMode ] = useState(false);
   const [ userName, setUserName ] = useState('');
@@ -57,20 +57,32 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
                     ? (
                       <div className="status-occupation-wrapper">
                         <Autosuggest
-                          suggestions={suggestions}
-                          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                          getSuggestionValue={getSuggestionValue}
-                          renderSuggestion={renderSuggestion}
+                          suggestions={suggestions.professions || []}
+                          onSuggestionsFetchRequested={({ value }) => getSuggestions(value, 'profession')}
+                          onSuggestionsClearRequested={() => setSuggestions([], 'professions')}
+                          getSuggestionValue={({ name }) => name}
+                          renderSuggestion={suggestion => <span>{suggestion.name}</span>}
                           inputProps={{
+                            placeholder: 'Chose your profession',
                             className: 'center middle-font',
                             value: profession,
-                            onChange: e => setProfession(e.target.value),
+                            onChange: (e, { newValue }) => setProfession(newValue),
                           }}
                         />
-                        <input value={profession} onChange={e => setProfession(e.target.value)} className="center middle-font" />
                         at
-                        <input value={companyName} onChange={e => setCompanyName(e.target.value)} className="center middle-font" />
+                        <Autosuggest
+                          suggestions={suggestions.companies || []}
+                          onSuggestionsFetchRequested={({ value }) => getSuggestions(value, 'company')}
+                          onSuggestionsClearRequested={() => setSuggestions([], 'companies')}
+                          getSuggestionValue={({ name }) => name}
+                          renderSuggestion={suggestion => <span>{suggestion.name}</span>}
+                          inputProps={{
+                            placeholder: 'Chose company you work on',
+                            className: 'center middle-font',
+                            value: companyName,
+                            onChange: (e, { newValue }) => setCompanyName(newValue),
+                          }}
+                        />
                       </div>
                     )
                     : <p className="lead">{profile.profession} at {profile.company_name}</p>
@@ -190,11 +202,13 @@ const Profile = ({ profile, getInfo, match, gitProjects }) => {
 const mapStateToProps = /* istanbul ignore next */ state => ({
   profile: getInfo(state),
   gitProjects: getGitProjects(state),
+  suggestions: getSuggestionsProps(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  getInfo: (userId) => dispatch(getProfileInfo(userId)),
-  getProfessions: (query, ) => dispatch(getSuggestions(query)),
+  getInfo: userId => dispatch(getProfileInfo(userId)),
+  getSuggestions: (query, fieldName) => dispatch(getSuggestions(query, fieldName)),
+  setSuggestions: (suggestions, fieldName) => dispatch(setSuggestions(suggestions, fieldName)),
 });
 
 export default connect(
