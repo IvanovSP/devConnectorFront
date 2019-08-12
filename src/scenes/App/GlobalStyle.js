@@ -277,4 +277,13 @@ export default createGlobalStyle`
     color: black;
     cursor: pointer;
   }
+  
+  .react-autosuggest__suggestion--highlighted {
+    background: #d0eaff;
+  }
+  
+  img.editProfile {
+    width: 50px;
+    top: 8px;
+  }
 `;

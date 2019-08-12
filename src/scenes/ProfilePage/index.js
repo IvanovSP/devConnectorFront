@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import Wrapper from '@/components/Wrapper';
 import { connect } from 'react-redux';
+import showcase from '@/assets/img/loading.gif';
 
 import { getInfo, getGitProjects, getSuggestions as getSuggestionsProps, getProfileIsLoading } from '@/redux/selectors/profile';
 import { getProfileInfo, getSuggestions, setSuggestions, updateProfile } from '@/redux/actions/profile';
@@ -66,6 +67,10 @@ const Profile = ({
                     }}
                   >Change</button>
                 )}
+
+                {
+                  profileIsLoading && <img className="editProfile" src={showcase} alt="" />
+                }
 
                 <img className="round-img my-1" src={profile.avatar} alt="" />
 
