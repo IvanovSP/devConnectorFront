@@ -17,3 +17,18 @@ export const getSuggestions = makeActionCreator(GET_SUGGESTIONS, 'searchQuery', 
 
 export const SET_SUGGESTIONS = 'SET_SUGGESTIONS';
 export const setSuggestions = makeActionCreator(SET_SUGGESTIONS, 'suggestions', 'fieldName');
+
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const updateProfile = makeActionCreator(
+  UPDATE_PROFILE,
+  'city',
+  'github_username',
+  'bio',
+  'email',
+  'profession',
+  'company_name',
+  'user_name',
+);
+
+export const UPDATE_PROFILE_LOADING = 'UPDATE_PROFILE_LOADING';
+export const updateProfileLoading = makeActionCreator(UPDATE_PROFILE_LOADING, 'isLoading');

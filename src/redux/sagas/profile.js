@@ -1,12 +1,41 @@
 import { all, fork, call, takeEvery, put, take } from 'redux-saga/effects';
-import { GET_PROFILE_INFO, setProfileInfo, setGitProjects, GET_SUGGESTIONS, setSuggestions } from '@/redux/actions';
-import { profile, profileGit } from '@/api/profile';
+import { GET_PROFILE_INFO, setProfileInfo, setGitProjects, GET_SUGGESTIONS, setSuggestions, UPDATE_PROFILE, updateProfileLoading } from '@/redux/actions';
+import { profilePUT, profileGET, profileGit } from '@/api/profile';
 import { getSuggestions } from '@/api/sugestions';
 import { handleError } from '@/redux/sagas/global';
 
-function* profileSaga({ userId }) {
+function* putProfileSaga() {
+  while (true) {
+    const {
+      city,
+      github_username,
+      bio,
+      email,
+      profession,
+      company_name,
+      user_name,
+    } = yield take(UPDATE_PROFILE);
+    debugger;
+    yield put(updateProfileLoading(true));
+
+    yield call(profilePUT, {
+      city,
+      github_username,
+      bio,
+      email,
+      profession,
+      company_name,
+      user_name,
+    });
+
+    yield call(getProfileSaga, {});
+    yield put(updateProfileLoading(false));
+  }
+}
+
+function* getProfileSaga({ userId }) {
   try {
-    const { data: profileInfo } = yield call(profile, userId);
+    const { data: profileInfo } = yield call(profileGET, userId);
     yield put(setProfileInfo(profileInfo));
     const { github_username } = profileInfo;
     if (github_username) {
@@ -18,7 +47,7 @@ function* profileSaga({ userId }) {
   }
 }
 
-export function* suggestionsSaga() {
+function* suggestionsSaga() {
   while (true) {
     const { searchQuery, fieldName } = yield take(GET_SUGGESTIONS);
     if (!searchQuery) return;
@@ -35,12 +64,13 @@ export function* suggestionsSaga() {
 
 
 function* watchForProfileSaga () {
-  yield takeEvery(GET_PROFILE_INFO, profileSaga);
+  yield takeEvery(GET_PROFILE_INFO, getProfileSaga);
 }
 
 export default function* () {
   yield all([
     fork(watchForProfileSaga),
     fork(suggestionsSaga),
+    fork(putProfileSaga),
   ]);
 }

@@ -5,12 +5,14 @@ import Autosuggest from 'react-autosuggest';
 import Wrapper from '@/components/Wrapper';
 import { connect } from 'react-redux';
 
-import { getInfo, getGitProjects, getSuggestions as getSuggestionsProps } from '@/redux/selectors/profile';
-import { getProfileInfo, getSuggestions, setSuggestions } from '@/redux/actions/profile';
+import { getInfo, getGitProjects, getSuggestions as getSuggestionsProps, getProfileIsLoading } from '@/redux/selectors/profile';
+import { getProfileInfo, getSuggestions, setSuggestions, updateProfile } from '@/redux/actions/profile';
 
 const { useEffect, useState } = React;
 
-const Profile = ({ profile, getInfo, match, gitProjects, getSuggestions, suggestions, setSuggestions }) => {
+const Profile = ({
+  profile, getInfo, match, gitProjects, getSuggestions, suggestions, setSuggestions, profileIsLoading, setUserProfileInfo
+}) => {
   const { userId } = match.params;
   const [ editMode, setEditMode ] = useState(false);
   const [ userName, setUserName ] = useState('');
@@ -32,6 +34,8 @@ const Profile = ({ profile, getInfo, match, gitProjects, getSuggestions, suggest
       setCity(profile.city);
     }
   }, [profile, editMode]);
+  console.log(`profileIsLoading ${profileIsLoading}`);
+  // github_username
 
   return  (
     <Wrapper>
@@ -42,7 +46,26 @@ const Profile = ({ profile, getInfo, match, gitProjects, getSuggestions, suggest
           <div className="profile-grid my-1">
             <div className="profile-top bg-primary p-2">
 
-                { isMyPage && <button className="editProfile" type="button" onClick={() => setEditMode(!editMode)}>Change</button> }
+                { isMyPage && !profileIsLoading && (
+                  <button
+                    className="editProfile"
+                    type="button"
+                    onClick={() => {
+                      setEditMode(!editMode);
+                      if (editMode) {
+                        setUserProfileInfo(
+                          profile.city,
+                          profile.github_username,
+                          profile.bio,
+                          profile.email,
+                          profession,
+                          companyName,
+                          userName,
+                        )
+                      }
+                    }}
+                  >Change</button>
+                )}
 
                 <img className="round-img my-1" src={profile.avatar} alt="" />
 
@@ -203,10 +226,12 @@ const mapStateToProps = /* istanbul ignore next */ state => ({
   profile: getInfo(state),
   gitProjects: getGitProjects(state),
   suggestions: getSuggestionsProps(state),
+  profileIsLoading: getProfileIsLoading(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   getInfo: userId => dispatch(getProfileInfo(userId)),
+  setUserProfileInfo: (...params) => dispatch(updateProfile(...params)),
   getSuggestions: (query, fieldName) => dispatch(getSuggestions(query, fieldName)),
   setSuggestions: (suggestions, fieldName) => dispatch(setSuggestions(suggestions, fieldName)),
 });

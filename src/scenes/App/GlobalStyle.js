@@ -267,9 +267,14 @@ export default createGlobalStyle`
   .react-autosuggest__suggestions-container {
     position: absolute;
     width: 100%;
-    background: white;
     max-height: 200px;
+    overflow-y: auto;
+    z-index: 1;
+  }
+  
+  .react-autosuggest__suggestion {
+    background: white;
     color: black;
-    overflow: scroll;
+    cursor: pointer;
   }
 `;
