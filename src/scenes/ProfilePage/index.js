@@ -5,6 +5,7 @@ import Autosuggest from 'react-autosuggest';
 import Wrapper from '@/components/Wrapper';
 import { connect } from 'react-redux';
 import showcase from '@/assets/img/loading.gif';
+import getSocials from '@/api/socials';
 
 import { getInfo, getGitProjects, getSuggestions as getSuggestionsProps, getProfileIsLoading } from '@/redux/selectors/profile';
 import { getProfileInfo, getSuggestions, setSuggestions, updateProfile } from '@/redux/actions/profile';
@@ -20,11 +21,21 @@ const Profile = ({
   const [ profession, setProfession ] = useState('');
   const [ companyName, setCompanyName ] = useState('');
   const [ city, setCity ] = useState('');
+  const [ socials, setSocials ] = useState('');
 
   const isMyPage = !match.params.userId;
   useEffect(() => {
     getInfo(match.params.userId);
   }, [getInfo, userId]);
+
+  useEffect(() => {
+    const fetchSocials = async () => {
+      const result = await getSocials();
+      setSocials(result);
+    };
+
+    fetchSocials();
+  }, []);
 
   // set values on fetch or editMode turned on
   useEffect(() => {
@@ -35,9 +46,8 @@ const Profile = ({
       setCity(profile.city);
     }
   }, [profile, editMode]);
-  console.log(`profileIsLoading ${profileIsLoading}`);
-  // github_username
 
+  console.log(socials);
   return  (
     <Wrapper>
       <div>
@@ -125,16 +135,23 @@ const Profile = ({
                     )
                     : <p>{profile.city}</p>
                 }
-                <div className="icons my-1">
-                  {profile.social.map((social) => {
-                    const className = `fab fa-${social.social_account} fa-2x"`;
-                    return (
-                      <a key={social.social_account} href={social.url} target="_blank" rel="noopener noreferrer" style={{ color: 'white', fontSize: '30px' }}>
-                        <i className={className} />
-                      </a>
-                    )}
-                  )}
-                </div>
+                {
+                  editMode
+                    ? null
+                    : (
+                      <div className="icons my-1">
+                        {profile.social.map((social) => {
+                          const className = `fab fa-${social.social_account} fa-2x"`;
+                          return (
+                            <a key={social.social_account} href={social.url} target="_blank" rel="noopener noreferrer" style={{ color: 'white', fontSize: '30px' }}>
+                              <i className={className} />
+                            </a>
+                          )}
+                        )}
+                      </div>
+                    )
+                }
+             
             </div>
 
             <div className="profile-about bg-light p-2">

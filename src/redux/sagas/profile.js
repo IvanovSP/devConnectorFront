@@ -15,7 +15,6 @@ function* putProfileSaga() {
       company_name,
       user_name,
     } = yield take(UPDATE_PROFILE);
-    debugger;
     yield put(updateProfileLoading(true));
 
     yield call(profilePUT, {
