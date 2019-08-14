@@ -286,4 +286,28 @@ export default createGlobalStyle`
     width: 50px;
     top: 8px;
   }
+  
+  .iconWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 487px;
+    padding-top: 23px;
+  }
+  
+  .socialRow {
+    display: flex;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  
+  .socialRow i.fab {
+    position: absolute;
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+  
+  .socialRow input {
+    width: 100%;
+  }
 `;

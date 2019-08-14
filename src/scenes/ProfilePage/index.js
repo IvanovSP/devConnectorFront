@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import Wrapper from '@/components/Wrapper';
+import Socials from './components/Socials';
 import { connect } from 'react-redux';
 import showcase from '@/assets/img/loading.gif';
 import getSocials from '@/api/socials';
@@ -21,7 +22,7 @@ const Profile = ({
   const [ profession, setProfession ] = useState('');
   const [ companyName, setCompanyName ] = useState('');
   const [ city, setCity ] = useState('');
-  const [ socials, setSocials ] = useState('');
+  const [ socials, setSocials ] = useState([]);
 
   const isMyPage = !match.params.userId;
   useEffect(() => {
@@ -30,7 +31,7 @@ const Profile = ({
 
   useEffect(() => {
     const fetchSocials = async () => {
-      const result = await getSocials();
+      const { socials: result } = await getSocials();
       setSocials(result);
     };
 
@@ -47,7 +48,6 @@ const Profile = ({
     }
   }, [profile, editMode]);
 
-  console.log(socials);
   return  (
     <Wrapper>
       <div>
@@ -135,23 +135,11 @@ const Profile = ({
                     )
                     : <p>{profile.city}</p>
                 }
-                {
-                  editMode
-                    ? null
-                    : (
-                      <div className="icons my-1">
-                        {profile.social.map((social) => {
-                          const className = `fab fa-${social.social_account} fa-2x"`;
-                          return (
-                            <a key={social.social_account} href={social.url} target="_blank" rel="noopener noreferrer" style={{ color: 'white', fontSize: '30px' }}>
-                              <i className={className} />
-                            </a>
-                          )}
-                        )}
-                      </div>
-                    )
-                }
-             
+              <Socials
+                profileSocials={profile.social}
+                overallSocials={socials}
+                editMode={editMode}
+              />
             </div>
 
             <div className="profile-about bg-light p-2">
