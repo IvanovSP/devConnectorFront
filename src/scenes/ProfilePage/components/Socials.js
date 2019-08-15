@@ -21,7 +21,7 @@ export default ({ profileSocials = [], overallSocials = [], editMode = false, on
   }, [profileSocials, overallSocials]);
 
   useEffect(() => {
-    if (!editMode) return;
+    if (editMode || !Object.keys(socialsMap).length) return;
     onSubmit(socialsMap);
   }, [editMode]);
 

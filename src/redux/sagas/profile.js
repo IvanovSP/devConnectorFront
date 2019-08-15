@@ -1,4 +1,4 @@
-import { all, fork, call, takeEvery, put, take } from 'redux-saga/effects';
+import { all, fork, call, takeEvery, put, take, select } from 'redux-saga/effects';
 import {
   GET_PROFILE_INFO,
   setProfileInfo,
@@ -7,11 +7,15 @@ import {
   setSuggestions,
   UPDATE_PROFILE,
   UPDATE_SOCIALS,
-  updateProfileLoading
+  updateProfileLoading,
+  GET_OVERALL_SOCIALS,
+  putOverallSocials,
 } from '@/redux/actions';
 import { profilePUT, profileGET, profileGit } from '@/api/profile';
+import fetchOverallSocials from '@/api/socials';
 import { getSuggestions } from '@/api/sugestions';
 import { handleError } from '@/redux/sagas/global';
+import { getInfo } from '@/redux/selectors/profile';
 
 function* putProfileSaga() {
   while (true) {
@@ -41,9 +45,19 @@ function* putProfileSaga() {
   }
 }
 
+function* getOverallSocials() {
+  while (true) {
+    yield take(GET_OVERALL_SOCIALS);
+    const { socials } = yield call(fetchOverallSocials);
+    debugger;
+    yield put(putOverallSocials(socials));
+  }
+}
+
 function* updateSocials() {
   while (true) {
     const { socials } = yield take(UPDATE_SOCIALS);
+    const usersInfo = yield select(getInfo);
     debugger;
   }
 }
@@ -88,5 +102,6 @@ export default function* () {
     fork(suggestionsSaga),
     fork(putProfileSaga),
     fork(updateSocials),
+    fork(getOverallSocials),
   ]);
 }

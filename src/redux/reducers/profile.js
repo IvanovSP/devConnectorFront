@@ -5,6 +5,7 @@ import {
   SET_GIT_PROJECTS,
   SET_SUGGESTIONS,
   UPDATE_PROFILE_LOADING,
+  PUT_OVERALL_SOCIALS,
 } from '@/redux/actions';
 
 import createReducer from '@/utils/createReducer';
@@ -20,6 +21,11 @@ export default createReducer(initialState, {
   [UPDATE_PROFILE_LOADING](state, { isLoading }) {
     return produce(state, draft => {
       draft.isLoading = isLoading;
+    });
+  },
+  [PUT_OVERALL_SOCIALS](state, { overallSocials }) {
+    return produce(state, draft => {
+      draft.overallSocials = overallSocials;
     });
   },
   [SET_PROFILE_INFO](state, { info }) {

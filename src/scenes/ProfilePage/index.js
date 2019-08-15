@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import showcase from '@/assets/img/loading.gif';
 import getSocials from '@/api/socials';
 
-import { getInfo, getGitProjects, getSuggestions as getSuggestionsProps, getProfileIsLoading } from '@/redux/selectors/profile';
-import { getProfileInfo, getSuggestions, setSuggestions, updateProfile, updateSocials } from '@/redux/actions/profile';
+import { getInfo, getGitProjects, getSuggestions as getSuggestionsProps, getProfileIsLoading, getOverallSocials as getOverallSocialsSelector } from '@/redux/selectors/profile';
+import { getProfileInfo, getSuggestions, setSuggestions, updateProfile, updateSocials, getOverallSocials } from '@/redux/actions/profile';
 
 const { useEffect, useState } = React;
 
@@ -24,6 +24,8 @@ const Profile = ({
   profileIsLoading,
   setUserProfileInfo,
   updateSocialsDispatcher,
+  getOverallSocialsDispatch,
+  overallSocials = [],
 }) => {
   const { userId } = match.params;
   const [ editMode, setEditMode ] = useState(false);
@@ -31,7 +33,6 @@ const Profile = ({
   const [ profession, setProfession ] = useState('');
   const [ companyName, setCompanyName ] = useState('');
   const [ city, setCity ] = useState('');
-  const [ socials, setSocials ] = useState([]);
 
   const isMyPage = !match.params.userId;
   useEffect(() => {
@@ -39,12 +40,7 @@ const Profile = ({
   }, [getInfo, userId]);
 
   useEffect(() => {
-    const fetchSocials = async () => {
-      const { socials: result } = await getSocials();
-      setSocials(result);
-    };
-
-    fetchSocials();
+    getOverallSocialsDispatch();
   }, []);
 
   // set values on fetch or editMode turned on
@@ -146,7 +142,7 @@ const Profile = ({
                 }
               <Socials
                 profileSocials={profile.social}
-                overallSocials={socials}
+                overallSocials={overallSocials}
                 editMode={editMode}
                 onSubmit={updateSocialsDispatcher}
               />
@@ -244,12 +240,14 @@ const Profile = ({
 
 const mapStateToProps = /* istanbul ignore next */ state => ({
   profile: getInfo(state),
+  overallSocials: getOverallSocialsSelector(state),
   gitProjects: getGitProjects(state),
   suggestions: getSuggestionsProps(state),
   profileIsLoading: getProfileIsLoading(state),
 });
 
 const mapDispatchToProps = dispatch => ({
+  getOverallSocialsDispatch: () => dispatch(getOverallSocials()),
   updateSocialsDispatcher: socials => dispatch(updateSocials(socials)),
   getInfo: userId => dispatch(getProfileInfo(userId)),
   setUserProfileInfo: (...params) => dispatch(updateProfile(...params)),

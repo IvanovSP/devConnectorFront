@@ -35,3 +35,9 @@ export const updateProfileLoading = makeActionCreator(UPDATE_PROFILE_LOADING, 'i
 
 export const UPDATE_SOCIALS = 'UPDATE_SOCIALS';
 export const updateSocials = makeActionCreator(UPDATE_SOCIALS, 'socials');
+
+export const GET_OVERALL_SOCIALS = 'GET_OVERALL_SOCIALS';
+export const getOverallSocials = makeActionCreator(GET_OVERALL_SOCIALS);
+
+export const PUT_OVERALL_SOCIALS = 'PUT_OVERALL_SOCIALS';
+export const putOverallSocials = makeActionCreator(PUT_OVERALL_SOCIALS, 'overallSocials');
