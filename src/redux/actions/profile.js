@@ -32,3 +32,6 @@ export const updateProfile = makeActionCreator(
 
 export const UPDATE_PROFILE_LOADING = 'UPDATE_PROFILE_LOADING';
 export const updateProfileLoading = makeActionCreator(UPDATE_PROFILE_LOADING, 'isLoading');
+
+export const UPDATE_SOCIALS = 'UPDATE_SOCIALS';
+export const updateSocials = makeActionCreator(UPDATE_SOCIALS, 'socials');

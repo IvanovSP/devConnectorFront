@@ -9,12 +9,21 @@ import showcase from '@/assets/img/loading.gif';
 import getSocials from '@/api/socials';
 
 import { getInfo, getGitProjects, getSuggestions as getSuggestionsProps, getProfileIsLoading } from '@/redux/selectors/profile';
-import { getProfileInfo, getSuggestions, setSuggestions, updateProfile } from '@/redux/actions/profile';
+import { getProfileInfo, getSuggestions, setSuggestions, updateProfile, updateSocials } from '@/redux/actions/profile';
 
 const { useEffect, useState } = React;
 
 const Profile = ({
-  profile, getInfo, match, gitProjects, getSuggestions, suggestions, setSuggestions, profileIsLoading, setUserProfileInfo
+  profile,
+  getInfo,
+  match,
+  gitProjects,
+  getSuggestions,
+  suggestions,
+  setSuggestions,
+  profileIsLoading,
+  setUserProfileInfo,
+  updateSocialsDispatcher,
 }) => {
   const { userId } = match.params;
   const [ editMode, setEditMode ] = useState(false);
@@ -139,6 +148,7 @@ const Profile = ({
                 profileSocials={profile.social}
                 overallSocials={socials}
                 editMode={editMode}
+                onSubmit={updateSocialsDispatcher}
               />
             </div>
 
@@ -240,6 +250,7 @@ const mapStateToProps = /* istanbul ignore next */ state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  updateSocialsDispatcher: socials => dispatch(updateSocials(socials)),
   getInfo: userId => dispatch(getProfileInfo(userId)),
   setUserProfileInfo: (...params) => dispatch(updateProfile(...params)),
   getSuggestions: (query, fieldName) => dispatch(getSuggestions(query, fieldName)),

@@ -1,7 +1,7 @@
 import React from 'react';
 const { useEffect, useState } = React;
 
-export default ({ profileSocials = [], overallSocials = [], editMode = false }) => {
+export default ({ profileSocials = [], overallSocials = [], editMode = false, onSubmit }) => {
   const [socialsMap, setSocialsMap] = useState({});
 
   useEffect(() => {
@@ -13,8 +13,8 @@ export default ({ profileSocials = [], overallSocials = [], editMode = false }) 
     overallSocials.forEach(({ name }) => {
       newMap[name] = '';
     });
-    profileSocials.forEach(({ social_account, url }) => {
-      newMap[social_account] = url;
+    profileSocials.forEach(({ social_account, socialUrl, handle }) => {
+      newMap[social_account] = `${socialUrl}/${handle}`;
     });
 
     setSocialsMap(newMap);
@@ -22,12 +22,17 @@ export default ({ profileSocials = [], overallSocials = [], editMode = false }) 
 
   useEffect(() => {
     if (!editMode) return;
-
-
+    onSubmit(socialsMap);
   }, [editMode]);
 
   const updateValue = (key, value) => {
     setSocialsMap({ ...socialsMap, ...{ [key]: value } });
+  };
+
+  const validateValue = (key, value) => {
+    const { url } = overallSocials.find(({name}) => name === key);
+    const isValid = value.search(`${url}/`) === 0;
+    setSocialsMap({ ...socialsMap, ...{ [key]: isValid ? value : ''} });
   };
 
   return (
@@ -38,7 +43,12 @@ export default ({ profileSocials = [], overallSocials = [], editMode = false }) 
             Object.entries(socialsMap).map(([key, value]) => (
               <div className="socialRow" key={key}>
                 <i className={`fab fa-${key} fa-2x"`} />
-                <input className="center middle-font" value={value} onChange={e => updateValue(key, e.target.value)} />
+                <input
+                  className="center middle-font"
+                  value={value}
+                  onChange={e => updateValue(key, e.target.value)}
+                  onBlur={e => validateValue(key, e.target.value)}
+                />
               </div>
             ))
           }
@@ -51,7 +61,13 @@ export default ({ profileSocials = [], overallSocials = [], editMode = false }) 
               (social) => {
                 const className = `fab fa-${social.social_account} fa-2x"`;
                 return (
-                  <a key={social.social_account} href={social.url} target="_blank" rel="noopener noreferrer" style={{ color: 'white', fontSize: '30px' }}>
+                  <a
+                    key={social.social_account}
+                    href={`${social.socialUrl}/${social.handle}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'white', fontSize: '30px' }}
+                  >
                     <i className={className} />
                   </a>
                 );

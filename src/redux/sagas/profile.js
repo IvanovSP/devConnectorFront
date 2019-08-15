@@ -1,5 +1,14 @@
 import { all, fork, call, takeEvery, put, take } from 'redux-saga/effects';
-import { GET_PROFILE_INFO, setProfileInfo, setGitProjects, GET_SUGGESTIONS, setSuggestions, UPDATE_PROFILE, updateProfileLoading } from '@/redux/actions';
+import {
+  GET_PROFILE_INFO,
+  setProfileInfo,
+  setGitProjects,
+  GET_SUGGESTIONS,
+  setSuggestions,
+  UPDATE_PROFILE,
+  UPDATE_SOCIALS,
+  updateProfileLoading
+} from '@/redux/actions';
 import { profilePUT, profileGET, profileGit } from '@/api/profile';
 import { getSuggestions } from '@/api/sugestions';
 import { handleError } from '@/redux/sagas/global';
@@ -29,6 +38,13 @@ function* putProfileSaga() {
 
     yield call(getProfileSaga, {});
     yield put(updateProfileLoading(false));
+  }
+}
+
+function* updateSocials() {
+  while (true) {
+    const { socials } = yield take(UPDATE_SOCIALS);
+    debugger;
   }
 }
 
@@ -71,5 +87,6 @@ export default function* () {
     fork(watchForProfileSaga),
     fork(suggestionsSaga),
     fork(putProfileSaga),
+    fork(updateSocials),
   ]);
 }
