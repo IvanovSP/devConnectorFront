@@ -11,11 +11,11 @@ import {
   GET_OVERALL_SOCIALS,
   putOverallSocials,
 } from '@/redux/actions';
-import { profilePUT, profileGET, profileGit } from '@/api/profile';
+import { profilePUT, profileGET, profileGit, updateSocials as updateSocialsAPI } from '@/api/profile';
 import fetchOverallSocials from '@/api/socials';
 import { getSuggestions } from '@/api/sugestions';
 import { handleError } from '@/redux/sagas/global';
-import { getInfo } from '@/redux/selectors/profile';
+import { getInfo, getOverallSocials as getOverallSocialsSelector } from '@/redux/selectors/profile';
 
 function* putProfileSaga() {
   while (true) {
@@ -49,7 +49,6 @@ function* getOverallSocials() {
   while (true) {
     yield take(GET_OVERALL_SOCIALS);
     const { socials } = yield call(fetchOverallSocials);
-    debugger;
     yield put(putOverallSocials(socials));
   }
 }
@@ -57,8 +56,9 @@ function* getOverallSocials() {
 function* updateSocials() {
   while (true) {
     const { socials } = yield take(UPDATE_SOCIALS);
-    const usersInfo = yield select(getInfo);
-    debugger;
+    const overallSocials = yield select(getOverallSocialsSelector);
+    const { social: userSocials } = yield select(getInfo);
+    yield call(updateSocialsAPI, { socials, overallSocials, userSocials });
   }
 }
 
@@ -68,7 +68,7 @@ function* getProfileSaga({ userId }) {
     yield put(setProfileInfo(profileInfo));
     const { github_username } = profileInfo;
     if (github_username) {
-      const { data: gitData} = yield call(profileGit, github_username);
+      const { data: gitData } = yield call(profileGit, github_username);
       yield put(setGitProjects(gitData));
     }
   } catch (error) {
@@ -92,7 +92,7 @@ function* suggestionsSaga() {
 }
 
 
-function* watchForProfileSaga () {
+function* watchForProfileSaga() {
   yield takeEvery(GET_PROFILE_INFO, getProfileSaga);
 }
 
