@@ -310,4 +310,24 @@ export default createGlobalStyle`
   .socialRow input {
     width: 100%;
   }
+  
+  .bio {
+    display: block;
+    height: 125px;
+    width: 100%;
+    font-family: 'Raleway',sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    resize: none;
+    overflow: auto;
+    padding: 5px;
+  }
+  
+  .desciptionBlock {
+    padding-bottom: 10px;
+  }
+  
+  .icons a{
+    margin: 0 6px;
+  }
 `;

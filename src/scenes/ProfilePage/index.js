@@ -32,6 +32,7 @@ const Profile = ({
   const [ userName, setUserName ] = useState('');
   const [ profession, setProfession ] = useState('');
   const [ companyName, setCompanyName ] = useState('');
+  const [ bio, setBio ] = useState('');
   const [ city, setCity ] = useState('');
 
   const isMyPage = !match.params.userId;
@@ -49,6 +50,7 @@ const Profile = ({
       setUserName(profile.user_name);
       setProfession(profile.profession);
       setCompanyName(profile.company_name);
+      setBio(profile.bio);
       setCity(profile.city);
     }
   }, [profile, editMode]);
@@ -72,7 +74,7 @@ const Profile = ({
                         setUserProfileInfo(
                           profile.city,
                           profile.github_username,
-                          profile.bio,
+                          bio,
                           profile.email,
                           profession,
                           companyName,
@@ -151,7 +153,12 @@ const Profile = ({
             <div className="profile-about bg-light p-2">
               <h2 className="text-primary">{profile.user_name}'s Bio</h2>
               <p>
-                {profile.bio}
+                {
+                  editMode
+                    ? (
+                      <textarea className="bio" resize="none" value={bio} onChange={e => setBio(e.target.value)} />
+                    ) : profile.bio
+                }
               </p>
               <div className="line"/>
               <h2 className="text-primary">Skill Set</h2>
@@ -197,7 +204,7 @@ const Profile = ({
                       <p>{moment(education.start_date).format('LL')} - {moment(education.end_date).format('LL')}</p>
                       <p><strong>Degree: </strong>{education.degree}</p>
                       <p><strong>Field Of Study: </strong>{education.stydy_field}</p>
-                      <p>
+                      <p className="desciptionBlock">
                         <strong>Description: </strong> {education.program_description}
                       </p>
                     </div>
