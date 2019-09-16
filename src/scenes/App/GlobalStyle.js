@@ -330,4 +330,25 @@ export default createGlobalStyle`
   .icons a{
     margin: 0 6px;
   }
+  
+  .react-tags__selected-tag {
+    padding: 0 10px;
+    margin: 5px;
+  }
+  
+  .react-tags__search-input {
+    display: flex;
+    justify-content: stretch;
+    padding: 0 5px;
+    width: 300px;
+    margin: 0 auto;
+  }
+  
+  .react-tags__search-input input {
+    padding: 0 5px;
+    flex: 1;
+    font-size: 14px;
+    height: 30px;
+    text-align: center;
+  }
 `;
