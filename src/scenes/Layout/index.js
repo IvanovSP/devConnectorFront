@@ -25,6 +25,7 @@ const protectedRoutes = (
     <Route path="/profiles" component={ProfilesPage} />
     <Route path="/woops" exact component={Woops} />
     <Route path="/:userId?" component={ProfilePage} />
+    <Route path="/" component={ProfilePage} />
     <Redirect to="/" />
   </Switch>
 );
