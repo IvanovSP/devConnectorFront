@@ -75,6 +75,5 @@ export const updateSkills = async ({ newSkills, skills }) => {
       data: { skillName: skill },
       headers: { Authorization: localStorage.getItem('session-token') },
     }));
-  debugger;
   await Promise.all([...deleteRequests, ...postRequests]);
 };

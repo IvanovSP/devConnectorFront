@@ -44,7 +44,6 @@ function* putProfileSaga() {
       call(skillsUpdateSaga, { newSkills : skills }),
       call(updateSocials, { socials }),
     ]);
-    debugger;
     yield call(getProfileSaga, {});
     yield put(updateProfileLoading(false));
   }
