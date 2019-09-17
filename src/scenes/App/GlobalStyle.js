@@ -351,4 +351,19 @@ export default createGlobalStyle`
     height: 30px;
     text-align: center;
   }
+  
+  .react-tags__suggestions {
+    width: 290px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  #ReactTags-listbox {
+    position: absolute;
+    right: 0;
+    left: 0;
+    background: white;
+    border: 1px solid black;
+    border-top: 0;
+  }
 `;

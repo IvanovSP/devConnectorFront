@@ -1,8 +1,7 @@
 import React from 'react';
 const { useEffect, useState } = React;
 
-export default ({ profileSocials = [], overallSocials = [], editMode = false, onSubmit }) => {
-  const [socialsMap, setSocialsMap] = useState({});
+export default ({ profileSocials = [], overallSocials = [], editMode = false, socialsMap, setSocialsMap }) => {
 
   useEffect(() => {
     if (
@@ -19,11 +18,6 @@ export default ({ profileSocials = [], overallSocials = [], editMode = false, on
 
     setSocialsMap(newMap);
   }, [profileSocials, overallSocials]);
-
-  useEffect(() => {
-    if (editMode || !Object.keys(socialsMap).length) return;
-    onSubmit(socialsMap);
-  }, [editMode]);
 
   const updateValue = (key, value) => {
     setSocialsMap({ ...socialsMap, ...{ [key]: value } });

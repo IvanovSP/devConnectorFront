@@ -3,6 +3,7 @@ import axios from 'axios';
 const routes = {
   profession: 'api/prof-status/',
   company: 'api/company/',
+  skills: 'api/skills/',
 }
 
 export const getSuggestions = async ({ searchQuery, fieldName }) => {

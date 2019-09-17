@@ -53,8 +53,28 @@ export const updateSocials = async ({ socials, overallSocials, userSocials }) =>
     .map(({ id, value }) => axios({
       method: 'put',
       url: `http://localhost:5000/api/profile/social/${id}`,
-      data: { url: (new URL(value)).pathname.substr(1) + (new URL(value)).search || ''  },
+      data: { url: (new URL(value)).pathname.substr(1) + (new URL(value)).search || '' },
       headers: { Authorization: localStorage.getItem('session-token') },
     }));
   await Promise.all([...deleteRequests, ...postRequests, ...putRequests]);
+};
+
+export const updateSkills = async ({ newSkills, skills }) => {
+  const deleteRequests = skills
+    .filter(({ skill }) => !newSkills.find(({ skill: newSkill }) => skill === newSkill))
+    .map(({ id }) => axios({
+      method: 'delete',
+      url: `http://localhost:5000/api/profile/skillset/${id}`,
+      headers: { Authorization: localStorage.getItem('session-token') },
+    }));
+  const postRequests = newSkills
+    .filter(({ skill }) => !skills.find(({ skill: oldSkill }) => skill === oldSkill))
+    .map(({ id = '', skill }) => axios({
+      method: 'post',
+      url: `http://localhost:5000/api/profile/skillset/${id}`,
+      data: { skillName: skill },
+      headers: { Authorization: localStorage.getItem('session-token') },
+    }));
+  debugger;
+  await Promise.all([...deleteRequests, ...postRequests]);
 };

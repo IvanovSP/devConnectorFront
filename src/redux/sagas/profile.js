@@ -6,12 +6,11 @@ import {
   GET_SUGGESTIONS,
   setSuggestions,
   UPDATE_PROFILE,
-  UPDATE_SOCIALS,
   updateProfileLoading,
   GET_OVERALL_SOCIALS,
   putOverallSocials,
 } from '@/redux/actions';
-import { profilePUT, profileGET, profileGit, updateSocials as updateSocialsAPI } from '@/api/profile';
+import { profilePUT, profileGET, profileGit, updateSocials as updateSocialsAPI, updateSkills as updateSkillsAPI } from '@/api/profile';
 import fetchOverallSocials from '@/api/socials';
 import { getSuggestions } from '@/api/sugestions';
 import { handleError } from '@/redux/sagas/global';
@@ -27,19 +26,25 @@ function* putProfileSaga() {
       profession,
       company_name,
       user_name,
+      skills,
+      socials,
     } = yield take(UPDATE_PROFILE);
     yield put(updateProfileLoading(true));
 
-    yield call(profilePUT, {
-      city,
-      github_username,
-      bio,
-      email,
-      profession,
-      company_name,
-      user_name,
-    });
-
+    yield all([
+      call(profilePUT, {
+        city,
+        github_username,
+        bio,
+        email,
+        profession,
+        company_name,
+        user_name,
+      }),
+      call(skillsUpdateSaga, { newSkills : skills }),
+      call(updateSocials, { socials }),
+    ]);
+    debugger;
     yield call(getProfileSaga, {});
     yield put(updateProfileLoading(false));
   }
@@ -53,13 +58,15 @@ function* getOverallSocials() {
   }
 }
 
-function* updateSocials() {
-  while (true) {
-    const { socials } = yield take(UPDATE_SOCIALS);
-    const overallSocials = yield select(getOverallSocialsSelector);
-    const { social: userSocials } = yield select(getInfo);
-    yield call(updateSocialsAPI, { socials, overallSocials, userSocials });
-  }
+function* skillsUpdateSaga({ newSkills }) {
+  const { skills } = yield select(getInfo);
+  yield call(updateSkillsAPI, { newSkills, skills });
+}
+
+function* updateSocials({ socials }) {
+  const overallSocials = yield select(getOverallSocialsSelector);
+  const { social: userSocials } = yield select(getInfo);
+  yield call(updateSocialsAPI, { socials, overallSocials, userSocials });
 }
 
 function* getProfileSaga({ userId }) {
@@ -91,7 +98,6 @@ function* suggestionsSaga() {
   }
 }
 
-
 function* watchForProfileSaga() {
   yield takeEvery(GET_PROFILE_INFO, getProfileSaga);
 }
@@ -101,7 +107,6 @@ export default function* () {
     fork(watchForProfileSaga),
     fork(suggestionsSaga),
     fork(putProfileSaga),
-    fork(updateSocials),
     fork(getOverallSocials),
   ]);
 }

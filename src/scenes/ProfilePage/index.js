@@ -9,10 +9,12 @@ import showcase from '@/assets/img/loading.gif';
 import ReactTags from 'react-tag-autocomplete';
 
 import {
-  getInfo, getGitProjects, getSuggestions as getSuggestionsProps, getProfileIsLoading, getOverallSocials as getOverallSocialsSelector,
+  getInfo, getGitProjects, getSuggestions as getSuggestionsProps,
+  getProfileIsLoading, getOverallSocials as getOverallSocialsSelector,
 } from '@/redux/selectors/profile';
 import {
-  getProfileInfo, getSuggestions, setSuggestions, updateProfile, updateSocials, getOverallSocials,
+  getProfileInfo, getSuggestions, setSuggestions,
+  updateProfile, getOverallSocials,
 } from '@/redux/actions/profile';
 
 const { useEffect, useState } = React;
@@ -27,7 +29,6 @@ const Profile = ({
   setSuggestions,
   profileIsLoading,
   setUserProfileInfo,
-  updateSocialsDispatcher,
   getOverallSocialsDispatch,
   overallSocials = [],
 }) => {
@@ -39,7 +40,7 @@ const Profile = ({
   const [bio, setBio] = useState('');
   const [city, setCity] = useState('');
   const [skills, setSkills] = useState([]);
-  const [skillSuggestions, setSkillSuggestions] = useState([]);
+  const [socialsMap, setSocialsMap] = useState({});
 
   const isMyPage = !match.params.userId;
   useEffect(() => {
@@ -61,7 +62,7 @@ const Profile = ({
       setSkills(profile.skills.slice(0));
     }
   }, [profile, editMode]);
-  console.log(profile.skills);
+
   return (
     <Wrapper>
       <div>
@@ -86,6 +87,8 @@ const Profile = ({
                   profession,
                   companyName,
                   userName,
+                  skills,
+                  socialsMap,
                 );
               }
             }}
@@ -93,7 +96,7 @@ const Profile = ({
             Change
           </button>
           )}
-          { profileIsLoading && <img className="editProfile" src={showcase} alt="" /> }
+          {profileIsLoading && <img className="editProfile" src={showcase} alt="" />}
           <img className="round-img my-1" src={profile.avatar} alt="" />
           {
                   editMode
@@ -158,13 +161,15 @@ const Profile = ({
             profileSocials={profile.social}
             overallSocials={overallSocials}
             editMode={editMode}
-            onSubmit={updateSocialsDispatcher}
+            socialsMap={socialsMap}
+            setSocialsMap={setSocialsMap}
           />
         </div>
 
         <div className="profile-about bg-light p-2">
           <h2 className="text-primary">
-            {profile.user_name}'s Bio
+            {profile.user_name}
+'s Bio
           </h2>
           <p>
             {
@@ -183,12 +188,15 @@ const Profile = ({
                   <ReactTags
                     tags={skills.map(({ skill, id }) => ({ name: skill, id }))}
                     allowNew
-                    suggestions={suggestions}
+                    autofocus={false}
+                    minQueryLength={1}
+                    maxSuggestionsLength={100}
+                    suggestions={suggestions.skills || []}
                     handleInputChange={(input) => {
                       if (!input) {
-                        setSuggestions([]);
+                        setSuggestions([], 'skills');
                       } else {
-
+                        return getSuggestions(input, 'skills');
                       }
                     }}
                     handleDelete={(i) => {
@@ -336,7 +344,6 @@ const mapStateToProps = /* istanbul ignore next */ state => ({
 
 const mapDispatchToProps = dispatch => ({
   getOverallSocialsDispatch: () => dispatch(getOverallSocials()),
-  updateSocialsDispatcher: socials => dispatch(updateSocials(socials)),
   getInfo: userId => dispatch(getProfileInfo(userId)),
   setUserProfileInfo: (...params) => dispatch(updateProfile(...params)),
   getSuggestions: (query, fieldName) => dispatch(getSuggestions(query, fieldName)),

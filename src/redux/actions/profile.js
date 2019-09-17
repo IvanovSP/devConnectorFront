@@ -28,13 +28,12 @@ export const updateProfile = makeActionCreator(
   'profession',
   'company_name',
   'user_name',
+  'skills',
+  'socials',
 );
 
 export const UPDATE_PROFILE_LOADING = 'UPDATE_PROFILE_LOADING';
 export const updateProfileLoading = makeActionCreator(UPDATE_PROFILE_LOADING, 'isLoading');
-
-export const UPDATE_SOCIALS = 'UPDATE_SOCIALS';
-export const updateSocials = makeActionCreator(UPDATE_SOCIALS, 'socials');
 
 export const GET_OVERALL_SOCIALS = 'GET_OVERALL_SOCIALS';
 export const getOverallSocials = makeActionCreator(GET_OVERALL_SOCIALS);
