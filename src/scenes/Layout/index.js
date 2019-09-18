@@ -20,36 +20,20 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const protectedRoutes = (
-  <Switch>
-    <Route path="/profiles" component={ProfilesPage} />
-    <Route path="/woops" exact component={Woops} />
-    <Route path="/:userId?" component={ProfilePage} />
-    <Route path="/" component={ProfilePage} />
-    <Redirect to="/" />
-  </Switch>
-);
-
-const pubicRoutes = (
-  <Switch>
-    <Route path="/" exact component={Landing} />
-    <Route path="/login" component={LoginPage} />
-    <Route path="/register" component={RegisterPage} />
-    <Route path="/woops" exact component={Woops} />
-    <Redirect to="/" />
-  </Switch>
-);
-
 const Layout = ({ isSignedIn }) => (
   <React.Fragment>
     <Container>
       <Router history={history}>
         <Header />
-        {
-          isSignedIn
-            ? protectedRoutes
-            : pubicRoutes
-        }
+        <Switch>
+          <Route path="/" exact component={isSignedIn ? ProfilePage : Landing} />
+          <Route path="/profiles" render={props => isSignedIn ? <ProfilesPage {...props} /> : <Redirect to="/" />} />
+          <Route path="/register" render={props => !isSignedIn ? <RegisterPage {...props} /> : <Redirect to="/" />} />
+          <Route path="/login" render={props => !isSignedIn ? <LoginPage {...props} /> : <Redirect to="/" />} />
+          <Route path="/woops" exact component={Woops} />
+          <Route path="/:userId?" render={props => isSignedIn ? <ProfilePage {...props} /> : <Landing {...props} />} />
+          <Redirect to="/" />
+        </Switch>
       </Router>
     </Container>
   </React.Fragment>

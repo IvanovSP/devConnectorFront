@@ -82,7 +82,9 @@ const Profile = ({
                         )
                       }
                     }}
-                  >Change</button>
+                  >
+                    {editMode ? 'Submit' : 'Change'}
+                  </button>
                 )}
 
                 {
