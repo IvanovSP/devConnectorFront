@@ -1,9 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Wrapper from '@/components/Wrapper';
+import { connect } from 'react-redux';
+import axios from 'axios';
+const { useEffect, useState } = React;
 
+// handle
+// name
+// avatar
+// profession
+// city
 
-export default () => {
+const ProfilesPage = () => {
+  const [search, setSearch] = useState('');
+  const [devs, setDevs] = useState([]);
+  console.log(devs);
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios({
+        method: 'get',
+        url: `http://localhost:5000/api/users/${search}`,
+        headers: { Authorization: localStorage.getItem('session-token') },
+      });
+      setDevs(result.data);
+    };
+
+    search
+      ? fetchData()
+      : setDevs([]);
+  }, [search, axios, setDevs]);
+
   return (
     <Wrapper>
       <h1 className="large text-primary">Developers</h1>
@@ -16,39 +42,30 @@ export default () => {
             type="email"
             placeholder="Type developers name"
             name="email"
-            required
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>
-      {/*<div>*/}
-        {/*<div className="profile bg-light">*/}
-          {/*<img className="round-img" src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200" alt="avatar" />*/}
-            {/*<div>*/}
-              {/*<h2>John Doe</h2>*/}
-              {/*<p>Developer at Microsoft</p>*/}
-              {/*<p>Seattle, WA</p>*/}
-              {/*<Link to="/profile" className="btn btn-primary">View Profile</Link>*/}
-            {/*</div>*/}
-
-            {/*<ul>*/}
-              {/*<li className="text-primary">*/}
-                {/*<i className="fas fa-check"></i> HTML*/}
-              {/*</li>*/}
-              {/*<li className="text-primary">*/}
-                {/*<i className="fas fa-check"></i> CSS*/}
-              {/*</li>*/}
-              {/*<li className="text-primary">*/}
-                {/*<i className="fas fa-check"></i> JavaScript*/}
-              {/*</li>*/}
-              {/*<li className="text-primary">*/}
-                {/*<i className="fas fa-check"></i> Python*/}
-              {/*</li>*/}
-              {/*<li className="text-primary">*/}
-                {/*<i className="fas fa-check"></i> C#*/}
-              {/*</li>*/}
-            {/*</ul>*/}
-        {/*</div>*/}
-      {/*</div>*/}
+      {
+        devs.map(({ handle, name, avatar, profession, city }) => (
+          <div className="card card-body bg-light mb-3" key={handle}>
+            <div className="row">
+              <div className="ava">
+                <img className="rounded-circle" src={avatar} alt="" />
+              </div>
+              <div className="search-info">
+                <h3>{name}</h3>
+                <p>{profession}</p>
+                <p>{city}</p>
+                <Link to={`/${handle}`} >View Profile</Link>
+              </div>
+            </div>
+          </div>
+        ))
+      }
     </Wrapper>
   );
-}
+};
+
+export default ProfilesPage;

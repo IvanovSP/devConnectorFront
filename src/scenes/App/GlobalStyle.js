@@ -352,7 +352,8 @@ export default createGlobalStyle`
   }
   
   .react-tags__search-input input,
-  .info-row input
+  .info-row input,
+  .profile-github input
    {
     padding: 0 5px;
     flex: 1;
@@ -395,4 +396,35 @@ export default createGlobalStyle`
     cursor: pointer;
   }
   
+  .profile-github  input.gitName {
+    flex: 0.3;
+  }
+  
+  .fa-github {
+    margin-right: 10px;
+  }
+  
+  .profile-github h2{
+    display: flex;
+    align-items: center;
+  }
+ 
+  .rounded-circle {
+    border-radius: 50%!important;
+  }
+  .ava {
+    width: 20%;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+  }
+  .search-info {
+    padding: 20px;
+  }
+  
+  .card-body {
+    margin-bottom: 20px;
+  }
 `;

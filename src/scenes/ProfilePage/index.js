@@ -45,6 +45,7 @@ const Profile = ({
   const [socialsMap, setSocialsMap] = useState({});
   const [experience, setExperience] = useState([]);
   const [education, setEducation] = useState([]);
+  const [githubUsername, setGithubUsername] = useState('');
 
   const isMyPage = !match.params.userId;
   useEffect(() => {
@@ -86,8 +87,8 @@ const Profile = ({
               setEditMode(!editMode);
               if (editMode) {
                 setUserProfileInfo(
-                  profile.city,
-                  profile.github_username,
+                  city,
+                  githubUsername,
                   bio,
                   profile.email,
                   profession,
@@ -566,8 +567,18 @@ const Profile = ({
           <div className="profile-github">
             <h2 className="text-primary my-1">
               <i className="fab fa-github" />
-              {' '}
-              Github Repos
+              {
+                editMode
+                  ? (
+                    <input
+                      className="gitName"
+                      placeholder="Git nickname"
+                      value={githubUsername}
+                      onChange={e => setGithubUsername(e.target.value)}
+                    />
+                  )
+                  : ` ${profile.github_username}'s Github Repos`
+              }
             </h2>
             {
               gitProjects.map(gitProject => (
