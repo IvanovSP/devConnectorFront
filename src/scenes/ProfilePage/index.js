@@ -43,6 +43,7 @@ const Profile = ({
   const [city, setCity] = useState('');
   const [skills, setSkills] = useState([]);
   const [socialsMap, setSocialsMap] = useState({});
+  const [experience, setExperience] = useState([]);
 
   const isMyPage = !match.params.userId;
   useEffect(() => {
@@ -62,6 +63,7 @@ const Profile = ({
       setBio(profile.bio);
       setCity(profile.city);
       setSkills(profile.skills.slice(0));
+      setExperience([...profile.experience]);
     }
   }, [profile, editMode]);
 
@@ -91,6 +93,7 @@ const Profile = ({
                   userName,
                   skills,
                   socialsMap,
+                  experience.filter(({ company_name }) => !!company_name),
                 );
               }
             }}
@@ -224,52 +227,169 @@ const Profile = ({
           <div className="profile-info profile-exp bg-white p-2">
             <h2 className="text-primary">Experience</h2>
             {
-                  profile.experience.map(
-                    (experience, i, arr) => (
-                      !editMode
-                        ? (
-                          <React.Fragment>
-                            <div key={moment(experience.startedDate).format() + moment(experience.endedDate).format()}>
-                              <h3 className="text-dark"><a href={experience.company_website}>{experience.company_name}</a></h3>
-                              <p>
-                                {moment(experience.startedDate).format('LL')}
-                                {' '}
-                                  -
-                                {' '}
-                                {moment(experience.endedDate).format('LL')}
-                              </p>
-                              <p>
-                                <strong>Position: </strong>
-                                {experience.job_title}
-                              </p>
-                              <p>
-                                <strong>Location: </strong>
-                                {experience.work_location}
-                              </p>
-                              <p>
-                                <strong>Description: </strong>
-                                {experience.work_descriprion}
-                              </p>
-                            </div>
-                            {arr[i + 1] && (
-                            <div
-                              key={moment(experience.startedDate).format() + moment(experience.endedDate).format() + 1}
-                              className="line"
-                            />
+              editMode
+                ? (
+                  experience.map(
+                    (exp, i, arr) => (
+                      <React.Fragment>
+                        <span
+                          onClick={() => {
+                            setExperience(
+                              produce(
+                                experience, (draft) => {
+                                  draft.splice(i, 1);
+                                },
+                              ),
+                            );
+                          }}
+                          className="closeIcon"
+                        >
+                          remove
+                        </span>
+                        <div className="info-row">
+                          <Autosuggest
+                            suggestions={suggestions.companies || []}
+                            onSuggestionsFetchRequested={({ value }) => getSuggestions(value, 'company')}
+                            onSuggestionsClearRequested={() => setSuggestions([], 'companies')}
+                            getSuggestionValue={({ name }) => name}
+                            renderSuggestion={suggestion => <span>{suggestion.name}</span>}
+                            inputProps={{
+                              placeholder: 'Chose company you worked on',
+                              value: exp.company_name,
+                              onChange: (e, { newValue }) => (
+                                setExperience(
+                                  produce(
+                                    experience, draft => {
+                                      draft[i].company_name = newValue;
+                                    },
+                                  ),
+                                )
+                              ),
+                            }}
+                          />
+                        </div>
+                        <div className="info-row">
+                          <Datepicker
+                            placeholderText="From date"
+                            date={new Date(exp.startedDate)}
+                            handleChange={date => setExperience(
+                              produce(
+                                experience, draft => {
+                                  draft[i].startedDate = date.toISOString();
+                                },
+                              ),
                             )}
-                          </React.Fragment>
-                        ) : (
-                          <React.Fragment>
-                            <div className="info-row">
-                              <Datepicker placeholderText="From date" date={new Date(experience.startedDate)} handleChange={() => {}} />
-                                To
-                              <Datepicker placeholderText="To date" date={new Date(experience.endedDate)} handleChange={() => {}} />
-                            </div>
-                          </React.Fragment>
-                        )
+                          />
+                          <span className="toWrapper">To</span>
+                          <Datepicker
+                            placeholderText="To date"
+                            date={new Date(exp.endedDate)}
+                            handleChange={date => setExperience(
+                              produce(
+                                experience, draft => {
+                                  draft[i].endedDate = date.toISOString();
+                                },
+                              ),
+                            )}
+                          />
+                        </div>
+                        <div className="info-row">
+                          <input
+                            placeholder="Work Location"
+                            value={exp.work_location}
+                            onChange={(e) => {
+                              setExperience(
+                                produce(
+                                  experience, (draft) => {
+                                    draft[i].work_location = e.target.value;
+                                  },
+                                ),
+                              );
+                            }}
+                          />
+                        </div>
+                        <div className="info-row">
+                          <textarea
+                            className="work-description"
+                            value={exp.work_descriprion}
+                            maxLength="255"
+                            onChange={(e) => {
+                              setExperience(
+                                produce(
+                                  experience, (draft) => {
+                                    draft[i].work_descriprion = e.target.value;
+                                  },
+                                ),
+                              );
+                            }}
+                          />
+                        </div>
+                        {arr[i + 1] && (
+                          <div
+                            key={moment(exp.startedDate).format() + moment(exp.endedDate).format() + 1}
+                            className="line"
+                          />
+                        )}
+                      </React.Fragment>
                     ),
                   )
-                }
+                ) : (
+                  profile.experience.map(
+                    (exp, i, arr) => (
+                      <React.Fragment>
+                        <div key={moment(exp.startedDate).format() + moment(exp.endedDate).format()}>
+                          <h3 className="text-dark"><a href={exp.company_website}>{exp.company_name}</a></h3>
+                          <p>
+                            {moment(exp.startedDate).format('LL')}
+                            {' '}
+                              -
+                            {' '}
+                            {moment(exp.endedDate).format('LL')}
+                          </p>
+                          <p>
+                            <strong>Position: </strong>
+                            {exp.job_title}
+                          </p>
+                          <p>
+                            <strong>Location: </strong>
+                            {exp.work_location}
+                          </p>
+                          <p>
+                            <strong>Description: </strong>
+                            {exp.work_descriprion}
+                          </p>
+                        </div>
+                        {arr[i + 1] && (
+                        <div
+                          key={moment(exp.startedDate).format() + moment(exp.endedDate).format() + 1}
+                          className="line"
+                        />
+                        )}
+                      </React.Fragment>
+                    ),
+                  )
+                )}
+            {
+              editMode && (
+                <div
+                  className="btn btn-light"
+                  onClick={() => {
+                    setExperience(
+                      produce(experience, draft => [...draft, {
+                        startedDate: new Date(),
+                        endedDate: new Date(),
+                        company_name: '',
+                        job_title: '',
+                        work_location: '',
+                        work_descriprion: '',
+                      }]),
+                    );
+                  }}
+                >
+                  Add company you worked for
+                </div>
+              )
+            }
           </div>
 
           <div className="profile-info profile-edu bg-white p-2">

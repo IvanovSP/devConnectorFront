@@ -256,22 +256,37 @@ export default createGlobalStyle`
     width: 100%;
   }
   
-  .react-autosuggest__suggestions-container {
+  .react-autosuggest__suggestions-container--open {
     position: absolute;
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
     z-index: 1;
+    border: 1px solid black;
+    border-top: 0;
   }
   
   .react-autosuggest__suggestion {
     background: white;
     color: black;
     cursor: pointer;
+    text-align: center;
   }
   
   .react-autosuggest__suggestion--highlighted {
     background: #d0eaff;
+  }
+  
+  .work-description {
+    display: block;
+    height: 80px;
+    width: 100%;
+    font-family: 'Raleway',sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    resize: none;
+    overflow: auto;
+    padding: 5px;
   }
   
   img.editProfile {
@@ -337,6 +352,7 @@ export default createGlobalStyle`
   }
   
   .react-tags__search-input input,
+  .info-row input
    {
     padding: 0 5px;
     flex: 1;
@@ -345,10 +361,24 @@ export default createGlobalStyle`
     text-align: center;
   }
   
+  .info-row {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .info-row .react-autosuggest__container{
+    width: 100%;
+  }
+  
   .react-tags__suggestions {
     width: 290px;
     margin: 0 auto;
     position: relative;
+  }
+  
+  .toWrapper {
+    margin: 0 10px;
   }
   
   #ReactTags-listbox {
@@ -360,7 +390,9 @@ export default createGlobalStyle`
     border-top: 0;
   }
   
-  .editMode .profile-wrapper {
-    flex-direction: column;
+  .closeIcon {
+    color: #a30000;
+    cursor: pointer;
   }
+  
 `;

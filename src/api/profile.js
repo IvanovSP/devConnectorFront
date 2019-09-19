@@ -77,3 +77,32 @@ export const updateSkills = async ({ newSkills, skills }) => {
     }));
   await Promise.all([...deleteRequests, ...postRequests]);
 };
+
+export const updateExpirience = async ({ newExperience, experience }) => {
+  const postRequests = newExperience
+    .filter(({ id }) => !id)
+    .map(expr => axios({
+      method: 'post',
+      url: 'http://localhost:5000/api/profile/expirience',
+      data: expr,
+      headers: { Authorization: localStorage.getItem('session-token') },
+    }));
+  const deleteRequests = experience
+    .filter(({ id }) => id && !newExperience.find(({ id: newId }) => id === newId))
+    .map(({ id }) => axios({
+      method: 'delete',
+      url: 'http://localhost:5000/api/profile/expirience',
+      data: { id },
+      headers: { Authorization: localStorage.getItem('session-token') },
+    }));
+  const putRequests = experience
+    .filter(({ id }) => id && newExperience.find(({ id: newId }) => id === newId))
+    .map(expr => axios({
+      method: 'put',
+      url: 'http://localhost:5000/api/profile/expirience',
+      data: expr,
+      headers: { Authorization: localStorage.getItem('session-token') },
+    }));
+
+  await Promise.all([...deleteRequests, ...postRequests, ...putRequests]);
+};
