@@ -171,15 +171,6 @@ export default createGlobalStyle`
     border-radius: 50%;
   }
   
-  profile-grid {
-    display: grid;
-    grid-template-areas: 'top top'
-   'about about'
-   'exp edu'
-   'github github';
-    grid-gap: 1rem;
-  }
-  
   .my-1 {
     margin: 1rem 0;
   }
@@ -254,6 +245,7 @@ export default createGlobalStyle`
   
   .profile-info {
     flex: 0.49;
+    margin-bottom: 10px;
   }
   
   .react-autosuggest__container{
@@ -344,7 +336,8 @@ export default createGlobalStyle`
     margin: 0 auto;
   }
   
-  .react-tags__search-input input {
+  .react-tags__search-input input,
+   {
     padding: 0 5px;
     flex: 1;
     font-size: 14px;
@@ -365,5 +358,9 @@ export default createGlobalStyle`
     background: white;
     border: 1px solid black;
     border-top: 0;
+  }
+  
+  .editMode .profile-wrapper {
+    flex-direction: column;
   }
 `;

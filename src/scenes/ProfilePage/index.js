@@ -29,6 +29,7 @@ const Profile = ({
   setSuggestions,
   profileIsLoading,
   setUserProfileInfo,
+  updateSocialsDispatcher,
   getOverallSocialsDispatch,
   overallSocials = [],
 }) => {
@@ -69,7 +70,7 @@ const Profile = ({
         <Link to="/profiles" className="btn btn-light">Back To Profiles</Link>
       </div>
       {profile.user_name && (
-      <div className="profile-grid my-1">
+      <div className={`profile-grid my-1 ${editMode ? 'editMode' : ''}`}>
         <div className="profile-top bg-primary p-2">
 
           {isMyPage && !profileIsLoading && (
@@ -93,10 +94,10 @@ const Profile = ({
               }
             }}
           >
-            Change
+            {editMode ? 'Submit' : 'Change'}
           </button>
           )}
-          {profileIsLoading && <img className="editProfile" src={showcase} alt="" />}
+          { profileIsLoading && <img className="editProfile" src={showcase} alt="" /> }
           <img className="round-img my-1" src={profile.avatar} alt="" />
           {
                   editMode
@@ -168,8 +169,7 @@ const Profile = ({
 
         <div className="profile-about bg-light p-2">
           <h2 className="text-primary">
-            {profile.user_name}
-'s Bio
+            {profile.user_name}'s Bio
           </h2>
           <p>
             {
@@ -269,7 +269,7 @@ const Profile = ({
                       <p>
                         {moment(education.start_date).format('LL')}
                         {' '}
--
+                        -
                         {' '}
                         {moment(education.end_date).format('LL')}
                       </p>
@@ -292,42 +292,42 @@ const Profile = ({
           </div>
         </div>
 
-        <div className="profile-github">
-          <h2 className="text-primary my-1">
-            <i className="fab fa-github" />
-            {' '}
-Github Repos
-          </h2>
-          {
-                gitProjects.map(gitProject => (
-                  <div key={gitProject.html_url} className="repo bg-white p-1 my-1">
-                    <div>
-                      <h4><a href={gitProject.html_url} target="_blank" rel="noopener noreferrer">{gitProject.name}</a></h4>
-                      <p>
-                        {gitProject.description}
-                      </p>
-                    </div>
-                    <div>
-                      <ul>
-                        <li className="badge badge-primary">
-Stars:
-                          {gitProject.stargazers_count}
-                        </li>
-                        <li className="badge badge-dark">
-Watchers:
-                          {gitProject.watchers_count}
-                        </li>
-                        <li className="badge badge-light">
-Forks:
-                          {gitProject.forks_count}
-                        </li>
-                      </ul>
-                    </div>
+          <div className="profile-github">
+            <h2 className="text-primary my-1">
+              <i className="fab fa-github" />
+              {' '}
+              Github Repos
+            </h2>
+            {
+              gitProjects.map(gitProject => (
+                <div key={gitProject.html_url} className="repo bg-white p-1 my-1">
+                  <div>
+                    <h4><a href={gitProject.html_url} target="_blank" rel="noopener noreferrer">{gitProject.name}</a></h4>
+                    <p>
+                      {gitProject.description}
+                    </p>
                   </div>
-                ))
-              }
+                  <div>
+                    <ul>
+                      <li className="badge badge-primary">
+                        Stars:
+                        {gitProject.stargazers_count}
+                      </li>
+                      <li className="badge badge-dark">
+                        Watchers:
+                        {gitProject.watchers_count}
+                      </li>
+                      <li className="badge badge-light">
+                        Forks:
+                        {gitProject.forks_count}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
         </div>
-      </div>
       )
       }
     </Wrapper>
@@ -344,6 +344,7 @@ const mapStateToProps = /* istanbul ignore next */ state => ({
 
 const mapDispatchToProps = dispatch => ({
   getOverallSocialsDispatch: () => dispatch(getOverallSocials()),
+  updateSocialsDispatcher: socials => dispatch(updateSocials(socials)),
   getInfo: userId => dispatch(getProfileInfo(userId)),
   setUserProfileInfo: (...params) => dispatch(updateProfile(...params)),
   getSuggestions: (query, fieldName) => dispatch(getSuggestions(query, fieldName)),
