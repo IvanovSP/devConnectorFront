@@ -95,12 +95,41 @@ export const updateExpirience = async ({ newExperience, experience }) => {
       data: { id },
       headers: { Authorization: localStorage.getItem('session-token') },
     }));
-  const putRequests = experience
-    .filter(({ id }) => id && newExperience.find(({ id: newId }) => id === newId))
+  const putRequests = newExperience
+    .filter(({ id: newId }) => newId && experience.find(({ id }) => id === newId))
     .map(expr => axios({
       method: 'put',
       url: 'http://localhost:5000/api/profile/expirience',
       data: expr,
+      headers: { Authorization: localStorage.getItem('session-token') },
+    }));
+
+  await Promise.all([...deleteRequests, ...postRequests, ...putRequests]);
+};
+
+export const updateEducation = async ({ newEducation, education }) => {
+  const postRequests = newEducation
+    .filter(({ id }) => !id)
+    .map(educat => axios({
+      method: 'post',
+      url: 'http://localhost:5000/api/profile/education',
+      data: educat,
+      headers: { Authorization: localStorage.getItem('session-token') },
+    }));
+  const deleteRequests = education
+    .filter(({ id }) => id && !newEducation.find(({ id: newId }) => id === newId))
+    .map(({ id }) => axios({
+      method: 'delete',
+      url: 'http://localhost:5000/api/profile/education',
+      data: { id },
+      headers: { Authorization: localStorage.getItem('session-token') },
+    }));
+  const putRequests = newEducation
+    .filter(({ id: newId }) => newId && education.find(({ id }) => id === newId))
+    .map(educat => axios({
+      method: 'put',
+      url: 'http://localhost:5000/api/profile/education',
+      data: educat,
       headers: { Authorization: localStorage.getItem('session-token') },
     }));
 

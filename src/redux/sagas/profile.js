@@ -10,7 +10,15 @@ import {
   GET_OVERALL_SOCIALS,
   putOverallSocials,
 } from '@/redux/actions';
-import { profilePUT, profileGET, profileGit, updateSocials as updateSocialsAPI, updateSkills as updateSkillsAPI, updateExpirience as updateExpirienceAPI } from '@/api/profile';
+import {
+  profilePUT,
+  profileGET,
+  profileGit,
+  updateSocials as updateSocialsAPI,
+  updateSkills as updateSkillsAPI,
+  updateExpirience as updateExpirienceAPI,
+  updateEducation as updateEducationAPI,
+} from '@/api/profile';
 import fetchOverallSocials from '@/api/socials';
 import { getSuggestions } from '@/api/sugestions';
 import { handleError } from '@/redux/sagas/global';
@@ -29,6 +37,7 @@ function* putProfileSaga() {
       skills,
       socials,
       experience,
+      education,
     } = yield take(UPDATE_PROFILE);
     yield put(updateProfileLoading(true));
 
@@ -44,11 +53,17 @@ function* putProfileSaga() {
       }),
       call(skillsUpdateSaga, { newSkills : skills }),
       call(updateSocials, { socials }),
+      call(educationUpdateSaga, { education }),
       call(experienceUpdateSaga, { experience }),
     ]);
     yield call(getProfileSaga, {});
     yield put(updateProfileLoading(false));
   }
+}
+
+function* educationUpdateSaga({ education: newEducation }) {
+  const { education } = yield select(getInfo);
+  yield call(updateEducationAPI, { newEducation, education });
 }
 
 function* experienceUpdateSaga({ experience: newExperience }) {

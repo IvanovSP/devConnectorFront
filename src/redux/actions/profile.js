@@ -31,6 +31,7 @@ export const updateProfile = makeActionCreator(
   'skills',
   'socials',
   'experience',
+  'education',
 );
 
 export const UPDATE_PROFILE_LOADING = 'UPDATE_PROFILE_LOADING';

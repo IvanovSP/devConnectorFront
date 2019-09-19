@@ -44,6 +44,7 @@ const Profile = ({
   const [skills, setSkills] = useState([]);
   const [socialsMap, setSocialsMap] = useState({});
   const [experience, setExperience] = useState([]);
+  const [education, setEducation] = useState([]);
 
   const isMyPage = !match.params.userId;
   useEffect(() => {
@@ -64,6 +65,7 @@ const Profile = ({
       setCity(profile.city);
       setSkills(profile.skills.slice(0));
       setExperience([...profile.experience]);
+      setEducation([...profile.education]);
     }
   }, [profile, editMode]);
 
@@ -94,6 +96,7 @@ const Profile = ({
                   skills,
                   socialsMap,
                   experience.filter(({ company_name }) => !!company_name),
+                  education.filter(({ establishment }) => !!establishment),
                 );
               }
             }}
@@ -395,32 +398,168 @@ const Profile = ({
           <div className="profile-info profile-edu bg-white p-2">
             <h2 className="text-primary">Education</h2>
             {
-                  profile.education.map(education => (
-                    <div key={moment(education.start_date).format('LL') + education.degree}>
-                      <h3 style={{ textTransform: 'uppercase' }}>{education.establishment}</h3>
+              editMode
+                ? (
+                  education.map((educat, i) => (
+                    <React.Fragment>
+                      <span
+                        onClick={() => {
+                          setEducation(
+                            produce(
+                              education, (draft) => {
+                                draft.splice(i, 1);
+                              },
+                            ),
+                          );
+                        }}
+                        className="closeIcon"
+                      >
+                        remove
+                      </span>
+                      <div className="info-row">
+                        <Autosuggest
+                          suggestions={suggestions.establishments || []}
+                          onSuggestionsFetchRequested={({ value }) => getSuggestions(value, 'educational-establishment')}
+                          onSuggestionsClearRequested={() => setSuggestions([], 'educational-establishment')}
+                          getSuggestionValue={({ name }) => name}
+                          renderSuggestion={suggestion => <span>{suggestion.name}</span>}
+                          inputProps={{
+                            placeholder: 'Chose academy you studied in',
+                            value: educat.establishment,
+                            onChange: (e, { newValue }) => (
+                              setEducation(
+                                produce(
+                                  education, draft => {
+                                    draft[i].establishment = newValue;
+                                  },
+                                ),
+                              )
+                            ),
+                          }}
+                        />
+                      </div>
+                      <div className="info-row">
+                        <Datepicker
+                          placeholderText="From date"
+                          date={new Date(educat.start_date)}
+                          handleChange={date => setEducation(
+                            produce(
+                              education, draft => {
+                                draft[i].start_date = date.toISOString();
+                              },
+                            ),
+                          )}
+                        />
+                        <span className="toWrapper">To</span>
+                        <Datepicker
+                          placeholderText="To date"
+                          date={new Date(educat.end_date)}
+                          handleChange={date => setEducation(
+                            produce(
+                              education, draft => {
+                                draft[i].end_date = date.toISOString();
+                              },
+                            ),
+                          )}
+                        />
+                      </div>
+                      <div className="info-row">
+                        <input
+                          placeholder="Degree"
+                          value={educat.degree}
+                          onChange={(e) => {
+                            setExperience(
+                              produce(
+                                education, (draft) => {
+                                  draft[i].degree = e.target.value;
+                                },
+                              ),
+                            );
+                          }}
+                        />
+                      </div>
+                      <div className="info-row">
+                        <input
+                          placeholder="Field"
+                          value={educat.stydy_field}
+                          onChange={(e) => {
+                            setExperience(
+                              produce(
+                                education, (draft) => {
+                                  draft[i].stydy_field = e.target.value;
+                                },
+                              ),
+                            );
+                          }}
+                        />
+                      </div>
+                      <div className="info-row">
+                        <input
+                          placeholder="Description"
+                          value={educat.program_description}
+                          onChange={(e) => {
+                            setExperience(
+                              produce(
+                                education, (draft) => {
+                                  draft[i].program_description = e.target.value;
+                                },
+                              ),
+                            );
+                          }}
+                        />
+                      </div>
+                    </React.Fragment>
+                  ))
+                ) : (
+                  profile.education.map(educat => (
+                    <div key={moment(educat.start_date).format('LL') + educat.degree}>
+                      <h3 style={{ textTransform: 'uppercase' }}>{educat.establishment}</h3>
                       <p>
-                        {moment(education.start_date).format('LL')}
+                        {moment(educat.start_date).format('LL')}
                         {' '}
                         -
                         {' '}
-                        {moment(education.end_date).format('LL')}
+                        {moment(educat.end_date).format('LL')}
                       </p>
                       <p>
                         <strong>Degree: </strong>
-                        {education.degree}
+                        {educat.degree}
                       </p>
                       <p>
                         <strong>Field Of Study: </strong>
-                        {education.stydy_field}
+                        {educat.stydy_field}
                       </p>
                       <p className="desciptionBlock">
                         <strong>Description: </strong>
                         {' '}
-                        {education.program_description}
+                        {educat.program_description}
                       </p>
                     </div>
                   ))
-                }
+                )
+            }
+            {
+              editMode && (
+                <div
+                  className="btn btn-light"
+                  onClick={() => {
+                    setEducation(
+                      produce(education, draft => [...draft, {
+                        degree: '',
+                        stydy_field: '',
+                        program_description: '',
+                        start_date: new Date(),
+                        end_date: new Date(),
+                        establishment: '',
+                        establishment_id: '',
+                      }]),
+                    );
+                  }}
+                >
+                  Add company you worked for
+                </div>
+              )
+            }
           </div>
         </div>
 

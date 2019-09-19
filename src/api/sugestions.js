@@ -4,6 +4,7 @@ const routes = {
   profession: 'api/prof-status/',
   company: 'api/company/',
   skills: 'api/skills/',
+  'educational-establishment': 'api/educational-establishment/',
 }
 
 export const getSuggestions = async ({ searchQuery, fieldName }) => {
