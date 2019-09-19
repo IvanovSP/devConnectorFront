@@ -83,6 +83,17 @@ module.exports = {
         ],
       },
       {
+        test: /\.css$/,
+        include: [
+          path.join(__dirname, '../node_modules'),
+        ],
+        use: [
+          {
+            loader: 'css-loader',
+          },
+        ],
+      },
+      {
         test: /\.html$/,
         include: /node_modules/,
         use: 'null-loader',

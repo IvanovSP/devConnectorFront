@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import produce from 'immer';
 import { Link } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import Wrapper from '@/components/Wrapper';
@@ -7,6 +8,7 @@ import Socials from './components/Socials';
 import { connect } from 'react-redux';
 import showcase from '@/assets/img/loading.gif';
 import ReactTags from 'react-tag-autocomplete';
+import Datepicker from '@/components/Datepicker';
 
 import {
   getInfo, getGitProjects, getSuggestions as getSuggestionsProps,
@@ -29,7 +31,6 @@ const Profile = ({
   setSuggestions,
   profileIsLoading,
   setUserProfileInfo,
-  updateSocialsDispatcher,
   getOverallSocialsDispatch,
   overallSocials = [],
 }) => {
@@ -225,36 +226,47 @@ const Profile = ({
             {
                   profile.experience.map(
                     (experience, i, arr) => (
-                      <React.Fragment>
-                        <div key={moment(experience.startedDate).format() + moment(experience.endedDate).format()}>
-                          <h3 className="text-dark"><a href={experience.company_website}>{experience.company_name}</a></h3>
-                          <p>
-                            {moment(experience.startedDate).format('LL')}
-                            {' '}
--
-                            {' '}
-                            {moment(experience.endedDate).format('LL')}
-                          </p>
-                          <p>
-                            <strong>Position: </strong>
-                            {experience.job_title}
-                          </p>
-                          <p>
-                            <strong>Location: </strong>
-                            {experience.work_location}
-                          </p>
-                          <p>
-                            <strong>Description: </strong>
-                            {experience.work_descriprion}
-                          </p>
-                        </div>
-                        {arr[i + 1] && (
-                        <div
-                          key={moment(experience.startedDate).format() + moment(experience.endedDate).format() + 1}
-                          className="line"
-                        />
-                        )}
-                      </React.Fragment>
+                      !editMode
+                        ? (
+                          <React.Fragment>
+                            <div key={moment(experience.startedDate).format() + moment(experience.endedDate).format()}>
+                              <h3 className="text-dark"><a href={experience.company_website}>{experience.company_name}</a></h3>
+                              <p>
+                                {moment(experience.startedDate).format('LL')}
+                                {' '}
+                                  -
+                                {' '}
+                                {moment(experience.endedDate).format('LL')}
+                              </p>
+                              <p>
+                                <strong>Position: </strong>
+                                {experience.job_title}
+                              </p>
+                              <p>
+                                <strong>Location: </strong>
+                                {experience.work_location}
+                              </p>
+                              <p>
+                                <strong>Description: </strong>
+                                {experience.work_descriprion}
+                              </p>
+                            </div>
+                            {arr[i + 1] && (
+                            <div
+                              key={moment(experience.startedDate).format() + moment(experience.endedDate).format() + 1}
+                              className="line"
+                            />
+                            )}
+                          </React.Fragment>
+                        ) : (
+                          <React.Fragment>
+                            <div className="info-row">
+                              <Datepicker placeholderText="From date" date={new Date(experience.startedDate)} handleChange={() => {}} />
+                                To
+                              <Datepicker placeholderText="To date" date={new Date(experience.endedDate)} handleChange={() => {}} />
+                            </div>
+                          </React.Fragment>
+                        )
                     ),
                   )
                 }
@@ -344,7 +356,6 @@ const mapStateToProps = /* istanbul ignore next */ state => ({
 
 const mapDispatchToProps = dispatch => ({
   getOverallSocialsDispatch: () => dispatch(getOverallSocials()),
-  updateSocialsDispatcher: socials => dispatch(updateSocials(socials)),
   getInfo: userId => dispatch(getProfileInfo(userId)),
   setUserProfileInfo: (...params) => dispatch(updateProfile(...params)),
   getSuggestions: (query, fieldName) => dispatch(getSuggestions(query, fieldName)),
