@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Wrapper from '@/components/Wrapper';
-import { connect } from 'react-redux';
 import axios from 'axios';
+import Wrapper from '@/components/Wrapper';
+
 const { useEffect, useState } = React;
 
 // handle
@@ -14,7 +14,6 @@ const { useEffect, useState } = React;
 const ProfilesPage = () => {
   const [search, setSearch] = useState('');
   const [devs, setDevs] = useState([]);
-  console.log(devs);
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios({
@@ -25,6 +24,7 @@ const ProfilesPage = () => {
       setDevs(result.data);
     };
 
+    // eslint-disable-next-line no-unused-expressions
     search
       ? fetchData()
       : setDevs([]);
@@ -34,7 +34,9 @@ const ProfilesPage = () => {
     <Wrapper>
       <h1 className="large text-primary">Developers</h1>
       <p className="lead">
-        <i className="fab fa-connectdevelop"></i> Browse and connect with developers
+        <i className="fab fa-connectdevelop" />
+        {' '}
+Browse and connect with developers
       </p>
       <div className="form">
         <div className="form-group">
@@ -43,12 +45,14 @@ const ProfilesPage = () => {
             placeholder="Type developers name"
             name="email"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
           />
         </div>
       </div>
       {
-        devs.map(({ handle, name, avatar, profession, city }) => (
+        devs.map(({
+          handle, name, avatar, profession, city,
+        }) => (
           <div className="card card-body bg-light mb-3" key={handle}>
             <div className="row">
               <div className="ava">
@@ -58,7 +62,7 @@ const ProfilesPage = () => {
                 <h3>{name}</h3>
                 <p>{profession}</p>
                 <p>{city}</p>
-                <Link to={`/${handle}`} >View Profile</Link>
+                <Link to={`/${handle}`}>View Profile</Link>
               </div>
             </div>
           </div>
